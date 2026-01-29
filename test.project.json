@@ -1,0 +1,28 @@
+{
+	"name": "bufferize",
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+			"DevPackages": {
+				"$path": "DevPackages",
+				"TestHelper": {
+					"$path": "tests",
+					"TestEntry": {
+						"$className": "Script",
+						"$properties": {
+							"RunContext": "Server",
+							"Source": "require(script.Parent.TestRunner)"
+						}
+					}
+				}
+			},
+			"Packages": {
+				"$path": "Packages",
+				"Bufferize": {
+					"$path": "default.project.json"
+				}
+			}
+		}
+	}
+}

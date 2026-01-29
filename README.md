@@ -1,2 +1,145 @@
 # rbx-bufferize
-A tool to convert tables to buffers and back in Roblox
+
+A tool to losslessly encode / decode roblox data types to buffers.
+
+```luau
+local mail = {
+	email = "john.doe@email.com",
+	street = "321 Road City Country",
+	unit = 123,
+}
+
+local tbl = {
+	name = "John Doe",
+	age = 603,
+	contact = mail,
+	mail = mail,
+}
+
+local b: buffer = Bufferize.encode("Hello world!", 123, true, tbl)
+print(Bufferize.decode(b)) -- "Hello world!", 123, true, tbl
+```
+
+## Instances
+
+Since instances can be converted to roblox data types it's possible for Bufferize to encode and decode them. To help with this Bufferize contains two functions to help with this process.
+
+```luau
+local b = Bufferize.encode(Bufferize.serializeInstance(workspace.Baseplate))
+local baseplateCopy = Bufferize.deserializeInstance(Bufferize.decode(b))
+```
+
+Sometimes properties are references to other instances (i.e. `ObjectValue.Value`). In order for a reference to be maintained it must be pointing to an instance that is also in the instance tree being serialized.
+
+```luau
+
+local objV = Instance.new("ObjectValue")
+local folder = Instance.new("Folder")
+folder.Parent = objV
+
+objV.Value = folder
+local b = Bufferize.encode(Bufferize.serializeInstance(folder))
+local objVCopy = Bufferize.deserializeInstance(Bufferize.decode(b))
+-- valid: objVCopy.Value == folderCopy
+
+objV.Value = workspace.Terrain
+local b = Bufferize.encode(Bufferize.serializeInstance(folder))
+local objVCopy = Bufferize.deserializeInstance(Bufferize.decode(b))
+-- not valid: objVCopy.Value == nil
+```
+
+## Custom Encoding
+
+Bufferize attempts to store all data types losslessly by default. This is helpful if precision is important for you, but depending on your project it may not be needed. In order to remain flexible in this regard Bufferize supports the ability to define custom encodings for any specific data type (except tables). 
+
+```luau
+local inHouseEncoder = Bufferize.custom()
+
+-- CFrame override that stores rotation euler angles XYZ rounded to nearest degree
+-- this is not lossless, but depending on your use case it may be good enough and it results
+-- in a smaller buffer size
+inHouseEncoder:override("CFrame", {
+	read = function(b: buffer)
+		local stream = Bufferize.stream(b)
+		local x, y, z = stream:readf32(), stream:readf32(), stream:readf32()
+		local rx, ry, rz = math.rad(stream:readi16()), math.rad(stream:readi16()), math.rad(stream:readi16())
+		return CFrame.new(x, y, z) * CFrame.fromEulerAngles(rx, ry, rz, Enum.RotationOrder.XYZ)
+	end,
+	write = function(cf: CFrame)
+		local stream = Bufferize.stream(buffer.create(0))
+		local rx, ry, rz = cf:ToEulerAngles(Enum.RotationOrder.XYZ)
+		stream:writef32(cf.X)
+		stream:writef32(cf.Y)
+		stream:writef32(cf.Z)
+		stream:writei16(math.round(math.deg(rx)))
+		stream:writei16(math.round(math.deg(ry)))
+		stream:writei16(math.round(math.deg(rz)))
+		return stream.b
+	end,
+})
+
+local complexRotation = CFrame.new(0, 0, 0, 1, 2, 3, 4)
+local lengthA = buffer.len(Bufferize.encode(complexRotation))
+local lengthB = buffer.len(inHouseEncoder:encode(complexRotation))
+print(lengthA > lengthB) -- true
+```
+
+## Supported DataTypes
+
+| **Data Type**               | **Supported** | **Overridable** |
+|-----------------------------|---------------|-----------------|
+| **boolean**                 | ✔             | ✔               |
+| **buffer**                  | ✔             | ✔               |
+| **nil**                     | ✔             | ✔               |
+| **number**                  | ✔             | ✔               |
+| **string**                  | ✔             | ✔               |
+| **table**                   | ✔             | ⛔              |
+| **Axes**                    | ✔             | ✔               |
+| **BrickColor**              | ✔             | ✔               |
+| **CatalogSearchParams**     | ✔             | ✔               |
+| **CFrame**                  | ✔             | ✔               |
+| **Color3**                  | ✔             | ✔               |
+| **ColorSequence**           | ✔             | ✔               |
+| **ColorSequenceKeypoint**   | ✔             | ✔               |
+| **Content**                 | ⛔            | ⛔              |
+| **DockWidgetPluginGuiInfo** | ✔             | ✔               |
+| **Content**                 | ❌            | ❌              |
+| **Enum**                    | ✔             | ✔               |
+| **EnumItem**                | ✔             | ✔               |
+| **Enums**                   | ✔             | ✔               |
+| **Faces**                   | ✔             | ✔               |
+| **FloatCurveKey**           | ✔             | ✔               |
+| **Font**                    | ✔             | ✔               |
+| **Instance**                | ❌            | ⛔              |
+| **NumberRange**             | ✔             | ✔               |
+| **NumberSequence**          | ✔             | ✔               |
+| **NumberSequenceKeypoint**  | ✔             | ✔               |
+| **OverlapParams**           | ⛔            | ⛔              |
+| **Path2DControlPoint**      | ✔             | ✔               |
+| **PathWaypoint**            | ✔             | ✔               |
+| **PhysicalProperties**      | ✔             | ✔               |
+| **Random**                  | ⛔            | ⛔              |
+| **Ray**                     | ✔             | ✔               |
+| **RaycastParams**           | ⛔            | ⛔              |
+| **RaycastResult**           | ⛔            | ⛔              |
+| **RBXScriptConnection**     | ⛔            | ⛔              |
+| **RBXScriptSignal**         | ⛔            | ⛔              |
+| **Rect**                    | ✔             | ✔               |
+| **Region3**                 | ✔             | ✔               |
+| **Region3int16**            | ✔             | ✔               |
+| **RotationCurveKey**        | ✔             | ✔               |
+| **Secret**                  | ⛔            | ⛔              |
+| **SharedTable**             | ❌            | ❌              |
+| **TweenInfo**               | ✔             | ✔               |
+| **UDim**                    | ✔             | ✔               |
+| **UDim2**                   | ✔             | ✔               |
+| **ValueCurveKey**           | ✔             | ✔               |
+| **vector**                  | ✔             | ✔               |
+| **Vector2**                 | ✔             | ✔               |
+| **Vector2int16**            | ✔             | ✔               |
+| **Vector3**                 | ✔             | ✔               |
+| **Vector3int16**            | ✔             | ✔               |
+
+
+✔ Implemented  | ❌ Unimplemented | ⛔ Never
+

@@ -35,7 +35,7 @@ for _, folderName in { "Packages", "DevPackages", "ServerPackages" } do
 	end
 end
 
-run("rojo", { "sourcemap", "develop.project.json", "-o", "sourcemap.json" })
+run("rojo", { "sourcemap", "test.project.json", "-o", "sourcemap.json" })
 
 for _, folderName in { "Packages", "DevPackages", "ServerPackages" } do
 	if fs.isDir(folderName) then

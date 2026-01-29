@@ -11,5 +11,5 @@
 		"editor.formatOnSave": false,
 	},
 	"stylua.targetReleaseVersion": "latest",
-	"luau-lsp.sourcemap.rojoProjectFile": "develop.project.json",
+	"luau-lsp.sourcemap.rojoProjectFile": "test.project.json",
 }
