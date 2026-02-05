@@ -2,7 +2,7 @@
 name = "egomoose/bufferize"
 description = "A tool to losslessly encode / decode roblox data types to buffers."
 repository = "https://github.com/EgoMoose/rbx-bufferize"
-version = "0.1.0"
+version = "1.0.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 license = "MIT"
