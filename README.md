@@ -1,4 +1,16 @@
+<!-- Links -->
+
+[bufferize/releases]: https://github.com/EgoMoose/rbx-bufferize/releases
+[bufferize/wally]: https://wally.run/package/egomoose/bufferize
+
+<!-- Badges -->
+
+[badges/github]: https://raw.githubusercontent.com/gist/cxmeel/0dbc95191f239b631c3874f4ccf114e2/raw/github.svg
+[badges/wally]: https://raw.githubusercontent.com/gist/cxmeel/0dbc95191f239b631c3874f4ccf114e2/raw/wally.svg
+
 # rbx-bufferize
+
+[![Get it on Github][badges/github]][bufferize/releases] [![Get it on Wally][badges/wally]][bufferize/wally]
 
 A tool to losslessly encode / decode roblox data types to buffers.
 
@@ -19,6 +31,8 @@ local tbl = {
 local b: buffer = Bufferize.encode("Hello world!", 123, true, tbl)
 print(Bufferize.decode(b)) -- "Hello world!", 123, true, tbl
 ```
+
+
 
 ## Instances
 
