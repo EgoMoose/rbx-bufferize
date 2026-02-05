@@ -15,4 +15,3 @@ CargoSemver = "tim7775/cargo-semver@1.0.20"
 [dev-dependencies]
 Jest = "jsdotlua/jest@3.10.0"
 JestGlobals = "jsdotlua/jest-globals@3.10.0"
-Sift = "csqrl/sift@0.0.11"
