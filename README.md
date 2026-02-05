@@ -103,7 +103,6 @@ print(lengthA > lengthB) -- true
 | **ColorSequenceKeypoint**   | ✔             | ✔               |
 | **Content**                 | ⛔            | ⛔              |
 | **DockWidgetPluginGuiInfo** | ✔             | ✔               |
-| **Content**                 | ❌            | ❌              |
 | **Enum**                    | ✔             | ✔               |
 | **EnumItem**                | ✔             | ✔               |
 | **Enums**                   | ✔             | ✔               |
