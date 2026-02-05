@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: "Setup rokit"
+        uses: CompeyDev/setup-rokit@v0.1.2
+
+      - name: "Run wally install"
+        run: |
+          lune run wally-install
+
+      - name: "Build rbxm"
+        run: |
+          rojo build .build/standalone.project.json --output bufferize-${{ github.ref_name }}.rbxm
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: |
+            bufferize-${{ github.ref_name }}.rbxm

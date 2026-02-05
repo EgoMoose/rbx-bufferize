@@ -22,6 +22,9 @@
 				"Bufferize": {
 					"$path": "default.project.json"
 				}
+			},
+			"Standalone": {
+				"$path": ".build/standalone.project.json"
 			}
 		}
 	}
