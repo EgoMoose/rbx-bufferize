@@ -23,7 +23,7 @@ jobs:
           rojo build .build/standalone.project.json --output bufferize-${{ github.ref_name }}.rbxm
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build
           path: |
