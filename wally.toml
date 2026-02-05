@@ -8,7 +8,6 @@ realm = "shared"
 license = "MIT"
 exclude = ["**"]
 include = ["src", "src/**", "wally.toml", "wally.lock", "default.project.json", "LICENSE"]
-private = true
 
 [dependencies]
 CargoSemver = "tim7775/cargo-semver@1.0.20"
