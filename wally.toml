@@ -1,8 +1,13 @@
 [package]
 name = "egomoose/bufferize"
+description = "A tool to losslessly encode / decode roblox data types to buffers."
+repository = "https://github.com/EgoMoose/rbx-bufferize"
 version = "0.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
+license = "MIT"
+exclude = ["**"]
+include = ["src", "src/**", "wally.toml", "wally.lock", "default.project.json", "LICENSE"]
 private = true
 
 [dependencies]
