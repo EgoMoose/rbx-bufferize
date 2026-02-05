@@ -74,6 +74,14 @@ local dictReadWrite = createUnsignedReadWrite(dict_u8TypeId, dict_u16TypeId, dic
 local function readDeepTblStream(stream: BufferStream)
 	local count = tblReadWrite.read(stream)
 
+	local udByPointerIndex = {}
+	local pointerIndexByUd = {}
+	for i = 1, count do
+		local ud = newproxy(false)
+		udByPointerIndex[i] = ud
+		pointerIndexByUd[ud] = i
+	end
+
 	local tblArr: { { [any]: any } } = {}
 	for i = 1, count do
 		local isArray = arrReadWrite.isKind(stream)
@@ -85,7 +93,7 @@ local function readDeepTblStream(stream: BufferStream)
 			local isInternal = id == internalTypeId
 			if isInternal and pointerReadWrite.isKind(stream) then
 				local pointerIndex = pointerReadWrite.read(stream)
-				arr[j] = tblArr[pointerIndex]
+				arr[j] = udByPointerIndex[pointerIndex]
 			else
 				arr[j] = StandaloneDataTypes:readStream(stream)
 			end
@@ -99,7 +107,7 @@ local function readDeepTblStream(stream: BufferStream)
 				local isInternal = stream:readu8() == internalTypeId
 				if isInternal and pointerReadWrite.isKind(stream) then
 					local pointerIndex = pointerReadWrite.read(stream)
-					dict[tblArr[pointerIndex]] = arr[j]
+					dict[udByPointerIndex[pointerIndex]] = arr[j]
 				else
 					dict[StandaloneDataTypes:readStream(stream)] = arr[j]
 				end
@@ -108,40 +116,66 @@ local function readDeepTblStream(stream: BufferStream)
 		end
 	end
 
-	return tblArr[#tblArr]
+	for _, tbl in tblArr do
+		for key, value in tbl do
+			local newKey = key
+			local keyIndex = pointerIndexByUd[key]
+			if keyIndex then
+				newKey = tblArr[keyIndex]
+			end
+
+			local newValue = value
+			local valueIndex = pointerIndexByUd[value]
+			if valueIndex then
+				newValue = tblArr[valueIndex]
+			end
+
+			tbl[key] = nil
+			tbl[newKey] = newValue
+		end
+	end
+
+	return tblArr[1]
 end
 
-local function writeDeepTblStream(stream: BufferStream, rootTbl: { [any]: any })
+local function getUniqueTblsArray(rootTbl: { [any]: any })
 	local i = 1
-	local stack = { rootTbl }
-	while stack[i] do
-		for key, value in stack[i] do
-			if typeof(key) == "table" then
-				table.insert(stack, key)
+	local uniqueArr = { rootTbl }
+
+	local visited = {}
+	local inArray = { [rootTbl] = true }
+
+	while uniqueArr[i] do
+		visited[uniqueArr[i]] = true
+
+		for key, value in uniqueArr[i] do
+			if typeof(key) == "table" and not inArray[key] then
+				inArray[key] = true
+				table.insert(uniqueArr, key)
 			end
-			if typeof(value) == "table" then
-				table.insert(stack, value)
+			if typeof(value) == "table" and not inArray[value] then
+				inArray[value] = true
+				table.insert(uniqueArr, value)
 			end
+		end
+
+		while visited[uniqueArr[i + 1]] do
+			i = i + 1
 		end
 		i = i + 1
 	end
 
+	return uniqueArr
+end
+
+local function writeDeepTblStream(stream: BufferStream, rootTbl: { [any]: any })
+	local uniqueTblsArr = getUniqueTblsArray(rootTbl)
+
 	local pointerCount = 0
 	local pointerIndexByTbl = {}
-	local function assignPointer(tbl: { [any]: any })
+	for _, tbl in uniqueTblsArr do
 		pointerCount = pointerCount + 1
 		pointerIndexByTbl[tbl] = pointerCount
-	end
-
-	local uniqueTblsSet = {}
-	local uniqueTblsArr = {}
-	for j = i - 1, 1, -1 do
-		local tbl = stack[j]
-		if not uniqueTblsSet[tbl] then
-			assignPointer(tbl)
-			uniqueTblsSet[tbl] = true
-			table.insert(uniqueTblsArr, tbl)
-		end
 	end
 
 	local length = #uniqueTblsArr
@@ -167,7 +201,8 @@ local function writeDeepTblStream(stream: BufferStream, rootTbl: { [any]: any })
 				keyStream:writeu8(internalTypeId)
 				pointerReadWrite.write(keyStream, pointerIndex)
 			else
-				if isArray and not (keyTypeOf == "number" and (key :: number) % 1 == 0) then
+				-- stylua: ignore
+				if isArray and not (keyTypeOf == "number" and key % 1 == 0 and key >= 1 and tbl[math.max(1, key - 1)] ~= nil) then
 					isArray = false
 				end
 				keyStream:writeu8(standaloneTypeId)

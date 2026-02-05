@@ -19,6 +19,8 @@ type DataTypeTest<T> = {
 
 local TestHelper = {}
 
+TestHelper.equalsDeep = require(script.EqualsDeep)
+
 function TestHelper.dataType<T>(definition: DataTypeDefinition.DataTypeDefinition<T>, test: DataTypeTest<T>)
 	if test.values.n == 0 then
 		it("should have no tests to run.", function()
@@ -34,7 +36,7 @@ function TestHelper.dataType<T>(definition: DataTypeDefinition.DataTypeDefinitio
 		end
 
 		local stream = BufferStream.new(buffer.create(0))
-		describe("Value: " .. truncated, function()
+		describe(i .. ". Value: " .. truncated, function()
 			if definition.unimplemented then
 				it("should fail to encode b/c the definition is unimplemented.", function()
 					local success = pcall(function()
@@ -72,7 +74,7 @@ function TestHelper.instances(test: DataTypeTest<Instance>)
 			truncated = truncated:sub(1, TRUNCATED_MAX) .. "... [truncated]"
 		end
 
-		describe("Instance: " .. truncated, function()
+		describe(i .. ". Instance: " .. truncated, function()
 			local serialized
 			it("should serialize.", function()
 				serialized = Bufferize.serializeInstance(instance)
@@ -89,6 +91,13 @@ function TestHelper.instances(test: DataTypeTest<Instance>)
 			it("should decode losslessly.", function()
 				decoded = Bufferize.decode(b)
 				expect(typeof(decoded)).toEqual("table")
+			end)
+
+			it("should match the initial serialization", function()
+				local isEqual = TestHelper.equalsDeep(serialized, decoded, function(a, b)
+					return true
+				end)
+				expect(isEqual).toEqual(true)
 			end)
 
 			local deserialized
