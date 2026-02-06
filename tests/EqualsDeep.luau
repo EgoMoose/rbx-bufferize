@@ -1,3 +1,8 @@
+-- needed a table comparison function that handles the following:
+-- 1. deep comparisons
+-- 2. cyclic / duplicate references
+-- 3. custom non-table compare logic (i.e. contents of bufferA == bufferB)
+
 local function getUniqueTblsArray(rootTbl: { [any]: any })
 	local i = 1
 	local uniqueArr = { rootTbl }
