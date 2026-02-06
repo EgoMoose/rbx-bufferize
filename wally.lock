@@ -4,7 +4,7 @@ registry = "test"
 
 [[package]]
 name = "egomoose/bufferize"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [["CargoSemver", "tim7775/cargo-semver@1.0.20"], ["Jest", "jsdotlua/jest@3.10.0"], ["JestGlobals", "jsdotlua/jest-globals@3.10.0"]]
 
 [[package]]
