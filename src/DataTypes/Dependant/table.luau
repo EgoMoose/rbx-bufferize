@@ -181,10 +181,6 @@ local function writeDeepTblStream(stream: BufferStream, rootTbl: { [any]: any })
 	local length = #uniqueTblsArr
 	tblReadWrite.write(stream, length)
 
-	-- write the tables to the buffer in reverse to how we found them
-	-- this ensures when we rebuild (which requires us to read front to back)
-	-- that the tables with sub-tables come later in the stream and we can
-	-- reference their already built dependents
 	for j = 1, length do
 		local tbl = uniqueTblsArr[j]
 		local keyStream = BufferStream.new(buffer.create(0))
