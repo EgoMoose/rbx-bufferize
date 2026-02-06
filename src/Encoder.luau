@@ -17,7 +17,8 @@ type CustomEncoder<T> = {
 
 local function getWallySemVer()
 	local ver = CargoSemver.Version.parse(Wally.package.version)
-	local comparator = CargoSemver.Comparator.parse(`~{ver.major}`)
+	local isSameMajor = CargoSemver.Comparator.parse(`~{ver.major}`)
+	local isLessThanOrEqual = CargoSemver.Comparator.parse("<=" .. tostring(ver))
 
 	local length = #tostring(ver)
 	assert(length <= 255, "Wally version cannot exceed 255 characters.")
@@ -25,7 +26,12 @@ local function getWallySemVer()
 	stream:writeu8(length)
 	stream:writeString(tostring(ver), length)
 
-	return { ver = ver, comparator = comparator, header = stream.b }
+	return {
+		ver = ver,
+		header = stream.b,
+		isSameMajorAsCurrent = isSameMajor,
+		isLessThanOrEqualToCurrent = isLessThanOrEqual,
+	}
 end
 
 local WALLY_SEMVER = getWallySemVer()
@@ -97,7 +103,17 @@ local function decodeInternal(b: buffer, encoders: { [string]: CustomEncoder<any
 	local wallyVersion = stream:readString(length)
 
 	local ver = assert(CargoSemver.Version.parse(wallyVersion), "Failed to read header version.")
-	assert(WALLY_SEMVER.comparator:matches(ver), "Attempted to load unsupported header version.")
+	assert(
+		WALLY_SEMVER.isSameMajorAsCurrent:matches(ver),
+		`Attempted to decode a buffer encoded with a different major version '{ver}'.`
+	)
+
+	assert(
+		WALLY_SEMVER.isLessThanOrEqualToCurrent:matches(ver),
+		`Attempted to decode a buffer encoded with a newer version of Bufferize '{ver}'.`
+	)
+
+	-- also don't want the version to be greater than WALLY_SEMVER.ver
 
 	local rootTbl = DataTypes.Encoder:readStream(stream)
 
