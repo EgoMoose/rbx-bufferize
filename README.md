@@ -32,8 +32,6 @@ local b: buffer = Bufferize.encode("Hello world!", 123, true, tbl)
 print(Bufferize.decode(b)) -- "Hello world!", 123, true, tbl
 ```
 
-
-
 ## Instances
 
 Since instances can be converted to roblox data types it's possible for Bufferize to encode and decode them. To help with this Bufferize contains two functions to help with this process.
@@ -97,6 +95,16 @@ local lengthA = buffer.len(Bufferize.encode(complexRotation))
 local lengthB = buffer.len(inHouseEncoder:encode(complexRotation))
 print(lengthA > lengthB) -- true
 ```
+
+## Versioning
+
+Bufferize strictly adheres to [semantic versioning](https://semver.org/).
+
+When a buffer is encoded the current version of bufferize is included. That way when a buffer is decoded it's possible to ensure we're not attempting to decode with an incompatible version of bufferize.
+
+For example, say you used bufferize v1.0.0 to store data in a datastore and then v2.0.0 is released. If you tried to read the v1.0.0 data with v2.0.0 bufferize then you'd get an error.
+
+This means in practice that when a major version of bufferize releases old data will not be compatible. When the minor or patch version changes you can decode your old data with the new version of bufferize, but you can't decode your new data with the old version.
 
 ## Supported DataTypes
 
