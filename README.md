@@ -116,6 +116,7 @@ This means in practice that when a major version of bufferize releases old data 
 | **number**                  | ✔             | ✔               |
 | **string**                  | ✔             | ✔               |
 | **table**                   | ✔             | ⛔              |
+| **userdata**                | ⛔            | ⛔              |
 | **Axes**                    | ✔             | ✔               |
 | **BrickColor**              | ✔             | ✔               |
 | **CatalogSearchParams**     | ✔             | ✔               |
