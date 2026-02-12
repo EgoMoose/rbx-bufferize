@@ -1,8 +1,8 @@
 local dataTypesRoot = script:FindFirstAncestor("DataTypes")
-local TableHelper = require(dataTypesRoot.Parent.Helpers.TableHelper)
 local BufferStream = require(dataTypesRoot.Parent.BufferStream)
 local DataTypeDefinition = require(dataTypesRoot.DataTypeDefinition)
 local StandaloneDataTypes = require(dataTypesRoot.Standalone)
+local TableHelper = require(dataTypesRoot.Helpers.TableHelper)
 
 type BufferStream = BufferStream.BufferStream
 

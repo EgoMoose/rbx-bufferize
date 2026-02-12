@@ -1,5 +1,6 @@
-local TableHelper = require(script.Parent.Parent.Helpers.TableHelper)
-local DataTypes = require(script.Parent.Parent.DataTypes)
+local bufferizeRoot = script.Parent.Parent
+local DataTypes = require(bufferizeRoot.DataTypes)
+local TableHelper = require(bufferizeRoot.DataTypes.Helpers.TableHelper)
 local pointerUserdata = DataTypes.Userdata.DeduplicationPointer
 
 local DeduplicatorSerializer = {}

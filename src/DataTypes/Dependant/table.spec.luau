@@ -1,5 +1,5 @@
-local devPackagesRoot = game.ReplicatedStorage.DevPackages
-local TestHelper = require(devPackagesRoot.TestHelper)
+local TestHelper = require(game.ReplicatedStorage.DevPackages.TestHelper)
+local TableHelper = require(script:FindFirstAncestor("DataTypes").Helpers.TableHelper)
 
 local function createCyclic()
 	local mail = {
@@ -53,7 +53,7 @@ local VALUES: { { [any]: any } } = {
 }
 
 local function equalsDeep(a, b)
-	return TestHelper.equalsDeep(a, b, function(a, b)
+	return TableHelper.equalsDeep(a, b, function(a, b)
 		if typeof(a) == "buffer" and typeof(b) == "buffer" then
 			return buffer.tostring(a) == buffer.tostring(b)
 		end

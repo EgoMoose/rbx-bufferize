@@ -7,7 +7,7 @@ local describe = JestGlobals.describe
 
 local bufferizeRoot = game.ReplicatedStorage.Packages.Bufferize
 local DataTypeDefinition = require(bufferizeRoot.DataTypes.DataTypeDefinition)
-local TableHelper = require(bufferizeRoot.Helpers.TableHelper)
+local TableHelper = require(bufferizeRoot.DataTypes.Helpers.TableHelper)
 local BufferStream = require(bufferizeRoot.BufferStream)
 local Bufferize = require(bufferizeRoot)
 
@@ -19,8 +19,6 @@ type DataTypeTest<T> = {
 }
 
 local TestHelper = {}
-
-TestHelper.equalsDeep = TableHelper.equalsDeep
 
 function TestHelper.dataType<T>(definition: DataTypeDefinition.DataTypeDefinition<T>, test: DataTypeTest<T>)
 	if test.values.n == 0 then
@@ -95,7 +93,7 @@ function TestHelper.instances(test: DataTypeTest<Instance>)
 			end)
 
 			it("should match the initial serialization", function()
-				local isEqual = TestHelper.equalsDeep(serialized, decoded, function(a, b)
+				local isEqual = TableHelper.equalsDeep(serialized, decoded, function(a, b)
 					if typeof(a) == "userdata" and typeof(b) == "userdata" then
 						return true
 					end

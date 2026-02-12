@@ -1,5 +1,5 @@
 local TestHelper = require(game.ReplicatedStorage.DevPackages.TestHelper)
-local CFrameStream = require(script.Parent.CFrame.CFrameStream)
+local CFrameStream = require(script:FindFirstAncestor("DataTypes").Helpers.CFrameStream)
 
 local VALUES = {
 	RotationCurveKey.new(0, CFrame.Angles(1, 2, 3), Enum.KeyInterpolationMode.Cubic),
