@@ -29,16 +29,17 @@ local function run(program: string, params: { string }, options: Options?)
 	return result.stdout:gsub("\n$", "")
 end
 
-local arg = process.args[1]
+local arg1 = process.args[1]
+local arg2 = process.args[2]
 
 local result
 pcall(function()
 	run("rojo", { "build", "test.project.json", "--output", "test-place.rbxl" })
 	result = run(
 		"run-in-roblox",
-		{ "--place", "test-place.rbxl", "--script", `lune/generate/{arg}.luau` },
+		{ "--place", "test-place.rbxl", "--script", `lune/generate/{arg1}.luau` },
 		{ stdio = "default" }
 	)
 end)
 
-fs.writeFile("supported.csv", result)
+fs.writeFile(arg2, result)

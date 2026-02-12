@@ -19,6 +19,7 @@ export type DataTypeDefinition<T> = typeof(setmetatable(
 	{} :: {
 		typeId: number,
 		typeOf: string,
+		typing: string,
 		definition: Definition<T>,
 		overridable: boolean,
 		support: "implemented" | "unimplemented" | "never",
@@ -31,6 +32,7 @@ function DataTypeDefinitionStatic.new<T>(typeOf: string, definition: Definition<
 
 	self.typeId = TypeIds.assert(typeOf)
 	self.typeOf = typeOf
+	self.typing = typeOf
 	self.definition = table.clone(definition)
 	self.overridable = true
 	self.support = "implemented"

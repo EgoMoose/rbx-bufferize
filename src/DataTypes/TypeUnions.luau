@@ -1,0 +1,76 @@
+export type Supported = nil
+	| boolean
+	| number
+	| string
+	| buffer
+	| { [any]: any }
+	| Axes
+	| BrickColor
+	| CFrame
+	| Color3
+	| ColorSequence
+	| ColorSequenceKeypoint
+	| Enum
+	| EnumItem
+	| Enums
+	| Faces
+	| FloatCurveKey
+	| Font
+	| NumberRange
+	| NumberSequence
+	| NumberSequenceKeypoint
+	| Path2DControlPoint
+	| PathWaypoint
+	| PhysicalProperties
+	| Ray
+	| Rect
+	| Region3
+	| Region3int16
+	| RotationCurveKey
+	| TweenInfo
+	| UDim
+	| UDim2
+	| vector
+	| Vector2
+	| Vector2int16
+	| Vector3
+	| Vector3int16
+
+export type Overridable = nil
+	| boolean
+	| number
+	| string
+	| buffer
+	| Axes
+	| BrickColor
+	| CFrame
+	| Color3
+	| ColorSequence
+	| ColorSequenceKeypoint
+	| Enum
+	| EnumItem
+	| Enums
+	| Faces
+	| FloatCurveKey
+	| Font
+	| NumberRange
+	| NumberSequence
+	| NumberSequenceKeypoint
+	| Path2DControlPoint
+	| PathWaypoint
+	| PhysicalProperties
+	| Ray
+	| Rect
+	| Region3
+	| Region3int16
+	| RotationCurveKey
+	| TweenInfo
+	| UDim
+	| UDim2
+	| vector
+	| Vector2
+	| Vector2int16
+	| Vector3
+	| Vector3int16
+
+return {}

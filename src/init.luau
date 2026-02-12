@@ -5,6 +5,9 @@ local InstanceSerializer = require(script.InstanceSerializer)
 export type Encoder = Encoder.Encoder
 export type BufferStream = BufferStream.BufferStream
 
+export type Supported = Encoder.Supported
+export type Overridable = Encoder.Overridable
+
 local Bufferize = {}
 local defaultEncoder = Encoder.new()
 
@@ -17,7 +20,7 @@ Bufferize.stream = BufferStream.new
 Bufferize.serializeInstance = InstanceSerializer.serialize
 Bufferize.deserializeInstance = InstanceSerializer.deserialize
 
-function Bufferize.encode(...: any)
+function Bufferize.encode(...: Supported)
 	return defaultEncoder:encode(...)
 end
 
