@@ -19,9 +19,26 @@ type CustomEncoder<T> = {
 }
 
 local function getWallySemVer()
-	local ver = CargoSemver.Version.parse(Wally.package.version)
-	local isSameMajor = CargoSemver.Comparator.parse(`~{ver.major}`)
-	local isLessThanOrEqual = CargoSemver.Comparator.parse("<=" .. tostring(ver))
+	local parsed = CargoSemver.Version.parse(Wally.package.version)
+
+	local ver = CargoSemver.Version.new(
+		parsed.major,
+		parsed.minor,
+		parsed.patch,
+		CargoSemver.Prerelease.EMPTY,
+		CargoSemver.BuildMetadata.EMPTY
+	)
+
+	local majorVer =
+		CargoSemver.Version.new(parsed.major, 0, 0, CargoSemver.Prerelease.EMPTY, CargoSemver.BuildMetadata.EMPTY)
+
+	local nextMajorVer = CargoSemver.Version.new(
+		parsed.major + 1,
+		parsed.minor,
+		parsed.patch,
+		CargoSemver.Prerelease.EMPTY,
+		CargoSemver.BuildMetadata.EMPTY
+	)
 
 	local length = #tostring(ver)
 	assert(length <= 255, "Wally version cannot exceed 255 characters.")
@@ -31,9 +48,9 @@ local function getWallySemVer()
 
 	return {
 		ver = ver,
+		majorVer = majorVer,
+		nextMajorVer = nextMajorVer,
 		header = stream.b,
-		isSameMajorAsCurrent = isSameMajor,
-		isLessThanOrEqualToCurrent = isLessThanOrEqual,
 	}
 end
 
@@ -105,15 +122,15 @@ local function decodeInternal(b: buffer, encoders: { [string]: CustomEncoder<any
 	local length = stream:readu8()
 	local wallyVersion = stream:readString(length)
 
-	local ver = assert(CargoSemver.Version.parse(wallyVersion), "Failed to read header version.")
+	local headerVer = assert(CargoSemver.Version.parse(wallyVersion), "Failed to read header version.")
 	assert(
-		WALLY_SEMVER.isSameMajorAsCurrent:matches(ver),
-		`Attempted to decode a buffer encoded with a different major version '{ver}'.`
+		headerVer >= WALLY_SEMVER.majorVer and headerVer < WALLY_SEMVER.nextMajorVer,
+		`Attempted to decode a buffer encoded with a different major version '{headerVer}'.`
 	)
 
 	assert(
-		WALLY_SEMVER.isLessThanOrEqualToCurrent:matches(ver),
-		`Attempted to decode a buffer encoded with a newer version of Bufferize '{ver}'.`
+		headerVer <= WALLY_SEMVER.ver,
+		`Attempted to decode a buffer encoded with a newer version of Bufferize '{headerVer}'.`
 	)
 
 	-- also don't want the version to be greater than WALLY_SEMVER.ver
