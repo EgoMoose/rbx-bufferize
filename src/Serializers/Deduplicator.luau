@@ -25,14 +25,9 @@ function Deduplicator.serialize(supportedSet: { [any]: boolean }, rootTbl: { [an
 	return { deduplicatedArr, rootTblCopy }
 end
 
-function Deduplicator.serializeTypeof(typeOfs: { string }, rootTbl: { [any]: any }): { { [any]: any } }
-	if not next(typeOfs) then
+function Deduplicator.serializeTypeof(typeOfsSet: { [string]: boolean }, rootTbl: { [any]: any }): { { [any]: any } }
+	if not next(typeOfsSet) then
 		return Deduplicator.serialize({}, rootTbl)
-	end
-
-	local typeOfsSet = {}
-	for _, typeOf in typeOfs do
-		typeOfsSet[typeOf] = true
 	end
 
 	local countByKV = {}
