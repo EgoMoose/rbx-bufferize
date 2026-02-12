@@ -6,7 +6,7 @@ local VALUES: { (...any) -> ...any } = {
 	setmetatable,
 }
 
-TestHelper.dataType(require(script.Parent["function"]), {
+TestHelper.dataType(require(script.Parent["luaFunction"]), {
 	values = table.pack(table.unpack(VALUES)),
 	compare = function(a, b)
 		return a == b
