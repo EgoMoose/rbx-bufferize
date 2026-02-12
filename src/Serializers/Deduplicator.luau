@@ -3,9 +3,9 @@ local DataTypes = require(bufferizeRoot.DataTypes)
 local TableHelper = require(bufferizeRoot.DataTypes.Helpers.TableHelper)
 local pointerUserdata = DataTypes.Userdata.DeduplicationPointer
 
-local DeduplicatorSerializer = {}
+local Deduplicator = {}
 
-function DeduplicatorSerializer.serialize(supportedDataTypes: { string }, rootTbl: { [any]: any }): { { [any]: any } }
+function Deduplicator.serialize(supportedDataTypes: { string }, rootTbl: { [any]: any }): { { [any]: any } }
 	local supportedSet = {}
 	for _, typeOf in supportedDataTypes do
 		if typeOf ~= "table" then
@@ -41,7 +41,7 @@ function DeduplicatorSerializer.serialize(supportedDataTypes: { string }, rootTb
 	return { deduplicatedArr, rootTblCopy }
 end
 
-function DeduplicatorSerializer.deserialize(compressed: { { [any]: any } })
+function Deduplicator.deserialize(compressed: { { [any]: any } })
 	local deduplicatedArr = compressed[1]
 	return TableHelper.copyDeep(compressed[2], function(kv)
 		if pointerUserdata:isTypeOf(kv) then
@@ -51,4 +51,4 @@ function DeduplicatorSerializer.deserialize(compressed: { { [any]: any } })
 	end)
 end
 
-return DeduplicatorSerializer
+return Deduplicator

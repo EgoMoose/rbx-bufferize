@@ -18,13 +18,10 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 
 	local pointerCount = 0
 	local pointerByInstance = {}
-	local instanceByPointerIndex = {}
-
 	local nilPointer = pointerUserdata:create(0)
 	local function assignPointer(instance: Instance)
 		pointerCount = pointerCount + 1
 		pointerByInstance[instance] = pointerUserdata:create(pointerCount)
-		instanceByPointerIndex[pointerCount] = instance
 	end
 
 	assignPointer(rootInstance)
@@ -32,7 +29,7 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 		assignPointer(descendant)
 	end
 
-	for pointerIndex, instance in instanceByPointerIndex do
+	for instance, pointer in pointerByInstance do
 		local className = instance.ClassName
 
 		local instanceAny = instance :: any
@@ -82,7 +79,7 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 		defaultInstance:Destroy()
 
 		serialized[2] = (j - 2) // 2
-		serializedArr[pointerIndex] = serialized
+		serializedArr[pointer.value.index] = serialized
 	end
 
 	return serializedArr

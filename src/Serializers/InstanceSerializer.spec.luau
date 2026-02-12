@@ -1,6 +1,5 @@
 local ReflectionService = game:GetService("ReflectionService") :: ReflectionService
 local InstanceSerializer = require(script.Parent.InstanceSerializer)
-
 local TestHelper = require(game.ReplicatedStorage.DevPackages.TestHelper)
 
 local function addUniques(instance: Instance)

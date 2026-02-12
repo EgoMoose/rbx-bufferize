@@ -10,7 +10,9 @@ local function standardCompare(a: any, b: any)
 	return a == b
 end
 
-local function getUniqueTblsArray(rootTbl: { [any]: any })
+-- Public
+
+function TableHelper.getUniqueTblsArray(rootTbl: { [any]: any })
 	local i = 1
 	local uniqueArr = { rootTbl }
 
@@ -40,12 +42,8 @@ local function getUniqueTblsArray(rootTbl: { [any]: any })
 	return uniqueArr
 end
 
--- Public
-
-TableHelper.getUniqueTblsArray = getUniqueTblsArray
-
 function TableHelper.replaceKV(rootTbl: { [any]: any }, replaceKV: (any) -> any)
-	local uniqueTblsArr = getUniqueTblsArray(rootTbl)
+	local uniqueTblsArr = TableHelper.getUniqueTblsArray(rootTbl)
 
 	local indexByTbl = {}
 	for i, tbl in uniqueTblsArr do
@@ -74,7 +72,7 @@ function TableHelper.copyDeep(rootTbl: { [any]: any }, customProcessKV: ((any) -
 	local processKV = customProcessKV or standardProcessKV
 
 	local uniqueTblsArrCopy = {}
-	local uniqueTblsArr = getUniqueTblsArray(rootTbl)
+	local uniqueTblsArr = TableHelper.getUniqueTblsArray(rootTbl)
 
 	local indexByTbl = {}
 	for i, tbl in uniqueTblsArr do
@@ -109,8 +107,8 @@ function TableHelper.equalsDeep(
 )
 	local compare = customCompare or standardCompare
 
-	local uniqueTblsArrA = getUniqueTblsArray(rootTblA)
-	local uniqueTblsArrB = getUniqueTblsArray(rootTblB)
+	local uniqueTblsArrA = TableHelper.getUniqueTblsArray(rootTblA)
+	local uniqueTblsArrB = TableHelper.getUniqueTblsArray(rootTblB)
 
 	local uniqueCount = #uniqueTblsArrA
 	if uniqueCount ~= #uniqueTblsArrB then
@@ -167,5 +165,7 @@ function TableHelper.equalsDeep(
 
 	return true
 end
+
+--
 
 return TableHelper
