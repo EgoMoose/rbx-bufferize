@@ -27,9 +27,9 @@ jobs:
         run: |
           lune run wally-install
 
-      - name: "Build rbxm"
+      - name: "Build standalone rbxm"
         run: |
-          rojo build .build/standalone.project.json --output bufferize-${{ github.ref_name }}.rbxm
+          lune run build-standalone bufferize-${{ github.ref_name }}.rbxm
 
       - name: Create Archive and Upload to Release
         shell: bash
