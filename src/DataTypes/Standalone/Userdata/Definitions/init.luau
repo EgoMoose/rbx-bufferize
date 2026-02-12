@@ -1,4 +1,5 @@
 return {
 	Userdefined = require(script.Userdefined),
-	Pointer = require(script.Pointer),
+	InstancePointer = require(script.InstancePointer),
+	DeduplicationPointer = require(script.DeduplicationPointer),
 }

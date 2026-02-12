@@ -6,6 +6,7 @@
     "words": [
         "bufferize",
         "cframe",
+        "deduplicator",
         "deque",
         "fromstring",
         "getmetatable",
