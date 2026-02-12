@@ -7,15 +7,16 @@ local function increment()
 end
 
 local TYPE_IDS: { [string]: number } = {
-	["userdata:userdefined"] = increment(),
-	["userdata:pointer"] = increment(),
-
 	["nil"] = increment(),
 	["boolean"] = increment(),
 	["number"] = increment(),
 	["string"] = increment(),
 	["buffer"] = increment(),
 	["table"] = increment(),
+
+	["userdata"] = increment(),
+	["userdata:userdefined"] = increment(),
+	["userdata:pointer"] = increment(),
 
 	["Axes"] = increment(),
 	["BrickColor"] = increment(),

@@ -37,7 +37,7 @@ function TestHelper.dataType<T>(definition: DataTypeDefinition.DataTypeDefinitio
 
 		local stream = BufferStream.new(buffer.create(0))
 		describe(i .. ". Value: " .. truncated, function()
-			if definition.unimplemented then
+			if definition.support ~= "implemented" then
 				it("should fail to encode b/c the definition is unimplemented.", function()
 					local success = pcall(function()
 						definition:writeStream(stream, value)

@@ -21,7 +21,7 @@ export type DataTypeDefinition<T> = typeof(setmetatable(
 		typeOf: string,
 		definition: Definition<T>,
 		overridable: boolean,
-		unimplemented: boolean,
+		support: "implemented" | "unimplemented" | "never",
 	},
 	DataTypeDefinitionClass
 ))
@@ -33,12 +33,12 @@ function DataTypeDefinitionStatic.new<T>(typeOf: string, definition: Definition<
 	self.typeOf = typeOf
 	self.definition = table.clone(definition)
 	self.overridable = true
-	self.unimplemented = false
+	self.support = "implemented"
 
 	return self
 end
 
-function DataTypeDefinitionStatic.unsupported(typeOf: string)
+function DataTypeDefinitionStatic.unimplemented(typeOf: string)
 	local definition = DataTypeDefinitionStatic.new(typeOf, {
 		read = function(_stream)
 			error(`Reading the '{typeOf}' type is not supported.`)
@@ -50,8 +50,14 @@ function DataTypeDefinitionStatic.unsupported(typeOf: string)
 	})
 
 	definition.overridable = false
-	definition.unimplemented = true
+	definition.support = "unimplemented"
 
+	return definition
+end
+
+function DataTypeDefinitionStatic.never(typeOf: string)
+	local definition = DataTypeDefinitionStatic.unimplemented(typeOf)
+	definition.support = "never"
 	return definition
 end
 
