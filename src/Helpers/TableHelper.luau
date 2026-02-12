@@ -1,8 +1,5 @@
 local TableHelper = {}
 
-export type Dictionary<K, V> = { [K]: V }
-export type Array<V> = { [number]: V }
-
 -- Private
 
 local function standardProcessKV(kv: any)
@@ -13,7 +10,7 @@ local function standardCompare(a: any, b: any)
 	return a == b
 end
 
-local function getUniqueTblsArray(rootTbl: Dictionary<any, any>)
+local function getUniqueTblsArray(rootTbl: { [any]: any })
 	local i = 1
 	local uniqueArr = { rootTbl }
 
@@ -45,7 +42,9 @@ end
 
 -- Public
 
-function TableHelper.replaceKV(rootTbl: Dictionary<any, any>, replaceKV: (any) -> any)
+TableHelper.getUniqueTblsArray = getUniqueTblsArray
+
+function TableHelper.replaceKV(rootTbl: { [any]: any }, replaceKV: (any) -> any)
 	local uniqueTblsArr = getUniqueTblsArray(rootTbl)
 
 	local indexByTbl = {}
@@ -71,7 +70,7 @@ function TableHelper.replaceKV(rootTbl: Dictionary<any, any>, replaceKV: (any) -
 	end
 end
 
-function TableHelper.copyDeep(rootTbl: Dictionary<any, any>, customProcessKV: ((any) -> any)?)
+function TableHelper.copyDeep(rootTbl: { [any]: any }, customProcessKV: ((any) -> any)?)
 	local processKV = customProcessKV or standardProcessKV
 
 	local uniqueTblsArrCopy = {}
@@ -104,8 +103,8 @@ function TableHelper.copyDeep(rootTbl: Dictionary<any, any>, customProcessKV: ((
 end
 
 function TableHelper.equalsDeep(
-	rootTblA: Dictionary<any, any>,
-	rootTblB: Dictionary<any, any>,
+	rootTblA: { [any]: any },
+	rootTblB: { [any]: any },
 	customCompare: ((any, any) -> boolean)?
 )
 	local compare = customCompare or standardCompare
@@ -118,9 +117,11 @@ function TableHelper.equalsDeep(
 		return false
 	end
 
+	local refSet = {}
 	local refByTbl = {}
 	for i = 1, uniqueCount do
 		local ref = { index = i }
+		refSet[ref] = true
 		refByTbl[uniqueTblsArrA[i]] = ref
 		refByTbl[uniqueTblsArrB[i]] = ref
 	end
@@ -141,13 +142,13 @@ function TableHelper.equalsDeep(
 		uniqueTblsArrB[i] = newTbl
 	end
 
-	for i = 1, #uniqueTblsArrA do
+	for i = 1, uniqueCount do
 		local tblA = uniqueTblsArrA[i]
 		local tblB = uniqueTblsArrB[i]
 
 		local visitedKeysSet = {}
 		for keyA, valueA in tblA do
-			if refByTbl[valueA] then
+			if refSet[valueA] then
 				if valueA ~= tblB[keyA] then
 					return false
 				end
