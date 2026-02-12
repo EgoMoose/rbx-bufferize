@@ -19,6 +19,7 @@ Bufferize.readVersion = Encoder.readVersion
 Bufferize.custom = Encoder.new
 Bufferize.stream = BufferStream.new
 
+Bufferize.deduplicateTypeof = Deduplicator.serializeTypeof
 Bufferize.deduplicate = Deduplicator.serialize
 Bufferize.reduplicate = Deduplicator.deserialize
 

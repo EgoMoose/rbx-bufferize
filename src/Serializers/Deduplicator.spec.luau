@@ -62,7 +62,7 @@ local VALUES: { { [any]: any } } = {
 TestHelper.values(table.pack(table.unpack(VALUES)), function(value)
 	local deduped
 	it("should serialize", function()
-		deduped = Bufferize.deduplicate({ "string" }, value)
+		deduped = Bufferize.deduplicateTypeof({ "string" }, value)
 		expect(typeof(deduped)).toEqual("table")
 	end)
 
