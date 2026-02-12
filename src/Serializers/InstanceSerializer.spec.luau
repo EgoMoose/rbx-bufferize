@@ -1,87 +1,19 @@
-local ReflectionService = game:GetService("ReflectionService") :: ReflectionService
-local InstanceSerializer = require(script.Parent.InstanceSerializer)
 local TestHelper = require(game.ReplicatedStorage.DevPackages.TestHelper)
+local JestGlobals = require(game.ReplicatedStorage.DevPackages.JestGlobals)
 
-local function addUniques(instance: Instance)
-	local descendants = instance:GetDescendants()
-	table.insert(descendants, instance)
-	for i, descendant in descendants do
-		descendant:SetAttribute("__unique", i)
-	end
-	return instance
-end
+local it = JestGlobals.it
+local expect = JestGlobals.expect
 
-local function instanceTreesEqual(instanceA: Instance, instanceB: Instance)
-	local uniqueMap = {}
-	local descendantsB = instanceB:GetDescendants()
-	table.insert(descendantsB, instanceB)
-	for i, descendant in descendantsB do
-		uniqueMap[descendant:GetAttribute("__unique") :: number] = descendant
-	end
+local bufferizeRoot = script.Parent.Parent
+local TableHelper = require(bufferizeRoot.DataTypes.Helpers.TableHelper)
+local Bufferize = require(bufferizeRoot)
 
-	local stack = { {
-		a = instanceA,
-		b = instanceB,
-	} }
-
-	while #stack > 0 do
-		local popped = table.remove(stack) :: typeof(assert(table.remove(stack)))
-
-		local properties = ReflectionService:GetPropertiesOfClass(popped.a.ClassName, {
-			Security = SecurityCapabilities.fromCurrent(),
-			ExcludeInherited = false,
-			ExcludeDisplay = false,
-		})
-
-		for _, property in properties do
-			if InstanceSerializer.shouldSerializeProperty(property) then
-				local valueA, valueB
-				local success = pcall(function()
-					valueA = (popped.a :: any)[property.Name]
-					valueB = (popped.b :: any)[property.Name]
-				end)
-
-				if not success then
-					return false
-				end
-
-				local typeofA = typeof(valueA)
-				if typeofA == "Instance" and typeof(valueB) == "Instance" then
-					local unique = assert(valueA:GetAttribute("__unique") :: number?)
-					local matched = assert(uniqueMap[unique])
-					if valueB ~= matched then
-						return false
-					end
-				elseif typeofA == "Instance" then
-					continue
-				elseif valueA ~= valueB then
-					return false
-				end
-			end
-		end
-
-		for _, child in popped.a:GetChildren() do
-			local unique = assert(child:GetAttribute("__unique") :: number?)
-			local matched = assert(uniqueMap[unique])
-
-			table.insert(stack, {
-				a = child,
-				b = matched,
-			})
-		end
-	end
-
-	return true
-end
+-- INSTANCE TESTS
 
 local testInstances = {}
 local function createTestInstance(callback: () -> Instance)
-	local instance = callback()
-	addUniques(instance)
-	table.insert(testInstances, instance)
+	table.insert(testInstances, callback())
 end
-
--- INSTANCE TESTS
 
 createTestInstance(function()
 	local part = Instance.new("Part")
@@ -114,7 +46,38 @@ end)
 
 --
 
-TestHelper.instances({
-	values = table.pack(table.unpack(testInstances)),
-	compare = instanceTreesEqual,
-})
+TestHelper.values(table.pack(table.unpack(testInstances)), function(instance)
+	local serialized
+	it("should serialize.", function()
+		serialized = Bufferize.serializeInstance(instance)
+		expect(typeof(serialized)).toEqual("table")
+	end)
+
+	local b
+	it("should encode to a buffer.", function()
+		b = Bufferize.encode(serialized)
+		expect(typeof(b)).toEqual("buffer")
+	end)
+
+	local decoded
+	it("should decode losslessly.", function()
+		decoded = Bufferize.decode(b)
+		expect(typeof(decoded)).toEqual("table")
+	end)
+
+	it("should match the initial serialization", function()
+		local isEqual = TableHelper.equalsDeep(serialized, decoded, function(a, b)
+			if typeof(a) == "userdata" and typeof(b) == "userdata" then
+				return true
+			end
+			return a == b
+		end)
+		expect(isEqual).toEqual(true)
+	end)
+
+	local deserialized
+	it("should deserialize.", function()
+		deserialized = Bufferize.deserializeInstance(decoded)
+		expect(typeof(deserialized)).toEqual("Instance")
+	end)
+end)
