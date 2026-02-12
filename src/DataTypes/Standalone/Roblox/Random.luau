@@ -1,4 +1,4 @@
 local dataTypesRoot = script:FindFirstAncestor("DataTypes")
 local DataTypeDefinition = require(dataTypesRoot.DataTypeDefinition)
 
-return DataTypeDefinition.unsupported("Random")
+return DataTypeDefinition.never("Random")

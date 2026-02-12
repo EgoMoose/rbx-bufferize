@@ -1,4 +1,4 @@
 local dataTypesRoot = script:FindFirstAncestor("DataTypes")
 local DataTypeDefinition = require(dataTypesRoot.DataTypeDefinition)
 
-return DataTypeDefinition.unsupported("OverlapParams")
+return DataTypeDefinition.never("OverlapParams")
