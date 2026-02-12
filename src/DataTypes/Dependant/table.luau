@@ -235,5 +235,6 @@ local tblDefinition = DataTypeDefinition.new("table", {
 })
 
 tblDefinition.overridable = false
+tblDefinition.typing = "{ [any]: any }"
 
 return tblDefinition

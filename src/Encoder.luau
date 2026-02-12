@@ -5,6 +5,9 @@ local Wally = require(script.Parent.Wally)
 local DataTypes = require(script.Parent.DataTypes)
 local BufferStream = require(script.Parent.BufferStream)
 
+export type Supported = DataTypes.Supported
+export type Overridable = DataTypes.Overridable
+
 type CopyStackEntry<T> = {
 	original: T,
 	copy: T,
@@ -193,7 +196,7 @@ function EncoderClass.override<T>(self: Encoder, typeOf: string, encoder: Custom
 	self.encoders[typeOf] = encoder
 end
 
-function EncoderClass.encode(self: Encoder, ...: any)
+function EncoderClass.encode(self: Encoder, ...: Supported)
 	-- we always wrap our inputs in a table b/c it will ensure
 	-- pointers are being used for duplicated tables
 	local packed = table.pack(...)
