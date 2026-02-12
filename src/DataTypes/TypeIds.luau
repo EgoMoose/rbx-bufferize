@@ -9,6 +9,7 @@ end
 local TYPE_IDS: { [string]: number } = {
 	["nil"] = increment(),
 	["boolean"] = increment(),
+	["function"] = increment(),
 	["number"] = increment(),
 	["string"] = increment(),
 	["buffer"] = increment(),

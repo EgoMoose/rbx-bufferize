@@ -112,6 +112,7 @@ This means in practice that when a major version of bufferize releases old data 
 |-----------------------------|---------------|-----------------|
 | **nil**                     | ✔             | ✔               |
 | **boolean**                 | ✔             | ✔               |
+| **function**                | ⛔             | ⛔               |
 | **number**                  | ✔             | ✔               |
 | **string**                  | ✔             | ✔               |
 | **buffer**                  | ✔             | ✔               |
