@@ -1,7 +1,7 @@
-local DataTypes = require(script.Parent.DataTypes)
+local DataTypes = require(script.Parent.Parent.DataTypes)
 local pointerUserdata = DataTypes.Userdata.DeduplicationPointer
 
-local Deduplicator = {}
+local DeduplicatorSerializer = {}
 
 local function getUniqueTblsArray(rootTbl: { [any]: any })
 	local i = 1
@@ -33,7 +33,7 @@ local function getUniqueTblsArray(rootTbl: { [any]: any })
 	return uniqueArr
 end
 
-function Deduplicator.compress(supportedDataTypes: { string }, rootTbl: { [any]: any }): { { [any]: any } }
+function DeduplicatorSerializer.serialize(supportedDataTypes: { string }, rootTbl: { [any]: any }): { { [any]: any } }
 	local supportedSet = {}
 	for _, typeOf in supportedDataTypes do
 		if typeOf ~= "table" then
@@ -114,7 +114,7 @@ function Deduplicator.compress(supportedDataTypes: { string }, rootTbl: { [any]:
 	return { deduplicated, uniqueTblsArrCopy[1] }
 end
 
-function Deduplicator.decompress(compressed: { { [any]: any } })
+function DeduplicatorSerializer.deserialize(compressed: { { [any]: any } })
 	local deduplicated = compressed[1]
 	local uniqueTblsArr = getUniqueTblsArray(compressed[2])
 
@@ -159,4 +159,4 @@ function Deduplicator.decompress(compressed: { { [any]: any } })
 	return uniqueTblsArrCopy[1]
 end
 
-return Deduplicator
+return DeduplicatorSerializer

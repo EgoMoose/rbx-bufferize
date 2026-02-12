@@ -1,6 +1,6 @@
 local ReflectionService = game:GetService("ReflectionService") :: ReflectionService
 
-local DataTypes = require(script.Parent.DataTypes)
+local DataTypes = require(script.Parent.Parent.DataTypes)
 local pointerUserdata = DataTypes.Userdata.InstancePointer
 
 local InstanceSerializer = {}

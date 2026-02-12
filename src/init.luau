@@ -1,6 +1,6 @@
 local Encoder = require(script.Encoder)
 local BufferStream = require(script.BufferStream)
-local InstanceSerializer = require(script.InstanceSerializer)
+local InstanceSerializer = require(script.Serializers.InstanceSerializer)
 
 export type Encoder = Encoder.Encoder
 export type BufferStream = BufferStream.BufferStream
