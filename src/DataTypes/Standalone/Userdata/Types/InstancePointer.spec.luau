@@ -1,5 +1,5 @@
 local TestHelper = require(game.ReplicatedStorage.DevPackages.TestHelper)
-local pointer = require(script.Parent.Parent.Definitions.Pointer)
+local pointer = require(script.Parent.Parent.Definitions.InstancePointer)
 
 local VALUES = {
 	pointer:create(10),
@@ -7,7 +7,7 @@ local VALUES = {
 	pointer:create(100000000000),
 }
 
-TestHelper.dataType(require(script.Parent.Pointer), {
+TestHelper.dataType(require(script.Parent.InstancePointer), {
 	values = table.pack(table.unpack(VALUES)),
 	compare = function(udA, udB)
 		local a = pointer:read(udA)

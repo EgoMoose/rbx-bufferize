@@ -17,7 +17,8 @@ local TYPE_IDS: { [string]: number } = {
 
 	["userdata"] = increment(),
 	["userdata:userdefined"] = increment(),
-	["userdata:pointer"] = increment(),
+	["userdata:instance-pointer"] = increment(),
+	["userdata:deduplication-pointer"] = increment(),
 
 	["Axes"] = increment(),
 	["BrickColor"] = increment(),

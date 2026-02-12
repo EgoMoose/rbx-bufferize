@@ -1,5 +1,5 @@
 local TestHelper = require(game.ReplicatedStorage.DevPackages.TestHelper)
-local CFrameStream = require(script.Parent:FindFirstChild("CFrameStream"))
+local CFrameStream = require(script:FindFirstAncestor("DataTypes").Helpers.CFrameStream)
 
 local VALUES = {
 	CFrame.identity,
@@ -7,7 +7,7 @@ local VALUES = {
 	CFrame.new(0, 0, 0, 1, 2, 3, 4),
 }
 
-TestHelper.dataType(require(script.Parent), {
+TestHelper.dataType(require(script.Parent.CFrame), {
 	values = table.pack(table.unpack(VALUES)),
 	compare = function(a, b)
 		--[[

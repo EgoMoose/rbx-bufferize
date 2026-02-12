@@ -6,6 +6,7 @@
     "words": [
         "bufferize",
         "cframe",
+        "deduplicator",
         "deque",
         "fromstring",
         "getmetatable",
@@ -24,6 +25,7 @@
         "readi",
         "readstring",
         "readu",
+        "reduped",
         "rojo",
         "serde",
         "setmetatable",

@@ -3,6 +3,7 @@ export type Supported = nil
 	| number
 	| string
 	| buffer
+	| { any }
 	| { [any]: any }
 	| Axes
 	| BrickColor

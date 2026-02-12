@@ -3,7 +3,7 @@ local DataTypeDefinition = require(dataTypesRoot.DataTypeDefinition)
 
 local userdataRoot = script:FindFirstAncestor("Userdata")
 local UserdataDefinitions = require(userdataRoot.Definitions)
-local userdataDefinition = UserdataDefinitions.Pointer
+local userdataDefinition = UserdataDefinitions.DeduplicationPointer
 
 local pointer_u8 = 1
 local pointer_u16 = 2

@@ -1,6 +1,6 @@
 local dataTypesRoot = script:FindFirstAncestor("DataTypes")
+local CFrameStream = require(dataTypesRoot.Helpers.CFrameStream)
 local DataTypeDefinition = require(dataTypesRoot.DataTypeDefinition)
-local CFrameStream = require(script.CFrameStream)
 
 return DataTypeDefinition.new("CFrame", {
 	read = CFrameStream.read,
