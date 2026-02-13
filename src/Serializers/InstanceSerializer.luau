@@ -5,7 +5,7 @@ local pointerUserdata = DataTypes.Userdata.InstancePointer
 
 local InstanceSerializer = {}
 
-function InstanceSerializer.shouldSerializeProperty(property: { [string]: any })
+local function shouldSerializeProperty(property: { [string]: any })
 	return property.Permits
 		and property.Permits.Read
 		and property.Permits.Write
@@ -46,7 +46,7 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 
 		local j = 2
 		for _, property in properties do
-			local shouldSerialize = InstanceSerializer.shouldSerializeProperty(property)
+			local shouldSerialize = shouldSerializeProperty(property)
 			if shouldSerialize and not (instance == rootInstance and property.Name == "Parent") then
 				local success, err = pcall(function()
 					local value = instanceAny[property.Name]
@@ -76,8 +76,15 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 			j = j + 2
 		end
 
+		local k = 0
+		for _, tagName in instance:GetTags() do
+			k = k + 1
+			serialized[j + 1 + k] = tagName
+		end
+
 		defaultInstance:Destroy()
 
+		serialized[j + 1] = if k > 0 then k else nil
 		serialized[2] = (j - 2) // 2
 		serializedArr[pointer.value.index] = serialized
 	end
@@ -91,14 +98,15 @@ function InstanceSerializer.deserialize(serializedArr: { any })
 	for i, serialized in serializedArr do
 		local className = serialized[1]
 		local keyValueCount = serialized[2] * 2
+		local tagCount = serialized[3 + keyValueCount] or 0
 
 		local instance = Instance.new(className)
 		local instanceAny = instance :: any
 
 		local isAttribute = false
-		for i = 1, keyValueCount, 2 do
-			local key = serialized[i + 2]
-			local value = serialized[i + 3]
+		for j = 1, keyValueCount, 2 do
+			local key = serialized[j + 2]
+			local value = serialized[j + 3]
 
 			if pointerUserdata:isTypeOf(value) then
 				local pointer = pointerUserdata:read(value)
@@ -111,6 +119,11 @@ function InstanceSerializer.deserialize(serializedArr: { any })
 			else
 				instanceAny[key] = value
 			end
+		end
+
+		for j = 1, tagCount do
+			local tagName = serialized[3 + keyValueCount + j]
+			instance:AddTag(tagName)
 		end
 
 		instances[i] = instance
