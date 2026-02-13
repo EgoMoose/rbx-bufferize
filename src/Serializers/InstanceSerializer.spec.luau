@@ -44,6 +44,19 @@ createTestInstance(function()
 	return root
 end)
 
+createTestInstance(function()
+	local root = Instance.new("Model")
+	root:AddTag("TagA")
+	local partA = Instance.new("Part", root)
+	partA:AddTag("TagB")
+	local partB = Instance.new("WedgePart", root)
+	partB.Size = Vector3.new(math.pi, 10, 1000.78)
+	local valPointer = Instance.new("ObjectValue", partB)
+	valPointer:AddTag("TagB")
+	valPointer.Parent = partA
+	return root
+end)
+
 --
 
 TestHelper.values(table.pack(table.unpack(testInstances)), function(instance)
