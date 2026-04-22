@@ -23,7 +23,6 @@ standalone.Source = trim([[
 local Bufferize = require(script.Packages.Bufferize)
 
 export type Encoder = Bufferize.Encoder
-export type BufferStream = Bufferize.BufferStream
 
 export type Supported = Bufferize.Supported
 export type Overridable = Bufferize.Overridable

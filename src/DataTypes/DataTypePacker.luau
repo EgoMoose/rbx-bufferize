@@ -65,9 +65,9 @@ end
 -- Methods
 
 function DataTypePackerClass.readStream(self: DataTypePacker, stream: BufferStream.BufferStream)
-	local prevCursor = stream.cursor
-	local typeId = stream:readTypeId()
-	stream.cursor = prevCursor
+	local prevCursor = stream:getCursor()
+	local typeId = BufferStream.readTypeId(stream)
+	stream:setCursor(prevCursor)
 	local definition = assert(self.definitionsByTypeId[typeId], `No type definition exists for typeId '{typeId}'.`)
 	return definition:readStream(stream)
 end

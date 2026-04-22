@@ -75,13 +75,13 @@ function DataTypeDefinitionClass.isOverridable<T>(self: DataTypeDefinition<T>)
 end
 
 function DataTypeDefinitionClass.readStream<T>(self: DataTypeDefinition<T>, stream: BufferStream)
-	local typeId = stream:readTypeId()
+	local typeId = BufferStream.readTypeId(stream)
 	assert(typeId == self.typeId, "TypeId does not match.")
 	return self.definition.read(stream)
 end
 
 function DataTypeDefinitionClass.writeStream<T>(self: DataTypeDefinition<T>, stream: BufferStream, value: T)
-	stream:writeTypeId(self.typeId)
+	BufferStream.writeTypeId(stream, self.typeId)
 	self.definition.write(stream, value)
 end
 
