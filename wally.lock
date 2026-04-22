@@ -9,7 +9,7 @@ dependencies = []
 
 [[package]]
 name = "egomoose/bufferize"
-version = "2.1.0"
+version = "3.0.0"
 dependencies = [["BufferStream", "egomoose/buffer-stream@1.0.0"], ["CargoSemver", "tim7775/cargo-semver@1.0.20"], ["Jest", "jsdotlua/jest@3.10.0"], ["JestGlobals", "jsdotlua/jest-globals@3.10.0"]]
 
 [[package]]
