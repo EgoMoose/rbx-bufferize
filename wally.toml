@@ -11,6 +11,7 @@ include = ["src", "src/**", "wally.toml", "wally.lock", "default.project.json", 
 
 [dependencies]
 CargoSemver = "tim7775/cargo-semver@1.0.20"
+BufferStream = "egomoose/buffer-stream@1.0.0"
 
 [dev-dependencies]
 Jest = "jsdotlua/jest@3.10.0"

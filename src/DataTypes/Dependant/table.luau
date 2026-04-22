@@ -127,8 +127,8 @@ local function writeDeepTblStream(stream: BufferStream, rootTbl: { [any]: any })
 	tblReadWrite.write(stream, #uniqueTblsArr)
 
 	for _, tbl in uniqueTblsArr do
-		local keyStream = BufferStream.new(buffer.create(0))
-		local valueStream = BufferStream.new(buffer.create(0))
+		local keyStream = BufferStream.dynamic(buffer.create(0))
+		local valueStream = BufferStream.dynamic(buffer.create(0))
 
 		local keyCount = 0
 		local isArray = true
@@ -159,17 +159,17 @@ local function writeDeepTblStream(stream: BufferStream, rootTbl: { [any]: any })
 			end
 		end
 
-		local tblStream = BufferStream.new(buffer.create(0))
+		local tblStream = BufferStream.dynamic(buffer.create(0))
 		if isArray then
 			arrReadWrite.write(tblStream, keyCount)
-			tblStream:writeBuffer(valueStream.b)
+			tblStream:writeBuffer(valueStream.buffer)
 		else
 			dictReadWrite.write(tblStream, keyCount)
-			tblStream:writeBuffer(valueStream.b)
-			tblStream:writeBuffer(keyStream.b)
+			tblStream:writeBuffer(valueStream.buffer)
+			tblStream:writeBuffer(keyStream.buffer)
 		end
 
-		stream:writeBuffer(tblStream.b)
+		stream:writeBuffer(tblStream.buffer)
 	end
 end
 

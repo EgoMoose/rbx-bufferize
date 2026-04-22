@@ -41,7 +41,7 @@ end
 
 function TestHelper.dataType<T>(definition: DataTypeDefinition.DataTypeDefinition<T>, test: DataTypeTest<T>)
 	return TestHelper.values(test.values, function(value)
-		local stream = BufferStream.new(buffer.create(0))
+		local stream = BufferStream.dynamic(buffer.create(0))
 
 		if definition.support ~= "implemented" then
 			it("should fail to encode b/c the definition is unimplemented.", function()
@@ -53,7 +53,7 @@ function TestHelper.dataType<T>(definition: DataTypeDefinition.DataTypeDefinitio
 		else
 			it("should encode to a buffer.", function()
 				definition:writeStream(stream, value)
-				expect(typeof(stream.b)).toEqual("buffer")
+				expect(typeof(stream.buffer)).toEqual("buffer")
 			end)
 
 			it("should decode losslessly.", function()

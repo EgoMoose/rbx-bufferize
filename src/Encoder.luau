@@ -42,7 +42,7 @@ local function getWallySemVer()
 
 	local length = #tostring(ver)
 	assert(length <= 255, "Wally version cannot exceed 255 characters.")
-	local stream = BufferStream.new(buffer.create(0))
+	local stream = BufferStream.dynamic(buffer.create(0))
 	stream:writeu8(length)
 	stream:writeString(tostring(ver), length)
 
@@ -50,7 +50,7 @@ local function getWallySemVer()
 		ver = ver,
 		majorVer = majorVer,
 		nextMajorVer = nextMajorVer,
-		header = stream.b,
+		header = stream.buffer,
 	}
 end
 
@@ -111,14 +111,14 @@ local function encodeInternal(rootTbl: { [any]: any }, encoders: { [string]: Cus
 		rootTbl = rootTblCopy
 	end
 
-	local stream = BufferStream.new(buffer.create(0))
+	local stream = BufferStream.dynamic(buffer.create(0))
 	stream:writeBuffer(WALLY_SEMVER.header)
 	DataTypes.Encoder:writeStream(stream, rootTbl)
-	return stream.b
+	return stream.buffer
 end
 
 local function decodeInternal(b: buffer, encoders: { [string]: CustomEncoder<any> })
-	local stream = BufferStream.new(b)
+	local stream = BufferStream.static(b)
 	local length = stream:readu8()
 	local wallyVersion = stream:readString(length)
 
@@ -198,7 +198,7 @@ function EncoderStatic.new()
 end
 
 function EncoderStatic.readVersion(b: buffer)
-	local stream = BufferStream.new(b)
+	local stream = BufferStream.static(b)
 	local length = stream:readu8()
 	local wallyVersion = stream:readString(length)
 	local ver = CargoSemver.Version.parse(wallyVersion)
