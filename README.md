@@ -72,13 +72,13 @@ local inHouseEncoder = Bufferize.custom()
 -- in a smaller buffer size
 inHouseEncoder:override("CFrame", {
 	read = function(b: buffer)
-		local stream = Bufferize.stream(b)
+		local stream = BufferStream.static(b)
 		local x, y, z = stream:readf32(), stream:readf32(), stream:readf32()
 		local rx, ry, rz = math.rad(stream:readi16()), math.rad(stream:readi16()), math.rad(stream:readi16())
 		return CFrame.new(x, y, z) * CFrame.fromEulerAngles(rx, ry, rz, Enum.RotationOrder.XYZ)
 	end,
 	write = function(cf: CFrame)
-		local stream = Bufferize.stream(buffer.create(0))
+		local stream = BufferStream.static(buffer.create(18))
 		local rx, ry, rz = cf:ToEulerAngles(Enum.RotationOrder.XYZ)
 		stream:writef32(cf.X)
 		stream:writef32(cf.Y)
@@ -86,7 +86,7 @@ inHouseEncoder:override("CFrame", {
 		stream:writei16(math.round(math.deg(rx)))
 		stream:writei16(math.round(math.deg(ry)))
 		stream:writei16(math.round(math.deg(rz)))
-		return stream.b
+		return stream.buffer
 	end,
 })
 
