@@ -72,23 +72,27 @@ local inHouseEncoder = Bufferize.custom()
 -- in a smaller buffer size
 inHouseEncoder:override("CFrame", {
 	read = function(b: buffer)
-		local stream = BufferStream.static(b)
-		local x, y, z = stream:readf32(), stream:readf32(), stream:readf32()
-		local rx, ry, rz = math.rad(stream:readi16()), math.rad(stream:readi16()), math.rad(stream:readi16())
+		local x = buffer.readf32(b, 0)
+		local y = buffer.readf32(b, 4)
+		local z = buffer.readf32(b, 8)
+		local rx = math.rad(buffer.readi16(b, 12))
+		local ry = math.rad(buffer.readi16(b, 14))
+		local rz = math.rad(buffer.readi16(b, 16))
 		return CFrame.new(x, y, z) * CFrame.fromEulerAngles(rx, ry, rz, Enum.RotationOrder.XYZ)
 	end,
 	write = function(cf: CFrame)
-		local stream = BufferStream.static(buffer.create(18))
+		local b = buffer.create(18)
 		local rx, ry, rz = cf:ToEulerAngles(Enum.RotationOrder.XYZ)
-		stream:writef32(cf.X)
-		stream:writef32(cf.Y)
-		stream:writef32(cf.Z)
-		stream:writei16(math.round(math.deg(rx)))
-		stream:writei16(math.round(math.deg(ry)))
-		stream:writei16(math.round(math.deg(rz)))
-		return stream.buffer
+		buffer.writef32(b, 0, cf.X)
+		buffer.writef32(b, 4, cf.Y)
+		buffer.writef32(b, 8, cf.Z)
+		buffer.writei16(b, 12, math.round(math.deg(rx)))
+		buffer.writei16(b, 14, math.round(math.deg(ry)))
+		buffer.writei16(b, 16, math.round(math.deg(rz)))
+		return b
 	end,
 })
+
 
 local complexRotation = CFrame.new(0, 0, 0, 1, 2, 3, 4)
 local lengthA = buffer.len(Bufferize.encode(complexRotation))
