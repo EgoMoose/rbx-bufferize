@@ -1,9 +1,18 @@
 {
 	"name": "bufferize",
+	"syncRules": [
+		{
+			"pattern": "LICENSE",
+			"use": "moduleScript"
+		}
+	],
 	"tree": {
 		"$path": "src",
 		"Wally": {
 			"$path": "wally.toml"
+		},
+		"LICENSE": {
+			"$path": "LICENSE"
 		}
 	}
 }
