@@ -9,3 +9,8 @@ supported.csv
 
 sourcemap.json
 *.ds_store
+
+# Moonwave / Docusaurus build output
+build/
+.docusaurus/
+node_modules/

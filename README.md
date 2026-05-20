@@ -44,7 +44,6 @@ local baseplateCopy = Bufferize.deserializeInstance(Bufferize.decode(b))
 Sometimes properties are references to other instances (i.e. `ObjectValue.Value`). In order for a reference to be maintained it must be pointing to an instance that is also in the instance tree being serialized.
 
 ```luau
-
 local objV = Instance.new("ObjectValue")
 local folder = Instance.new("Folder")
 folder.Parent = objV
