@@ -175,7 +175,37 @@ end
 
 -- Class
 
+--[=[
+	@class Encoder
+
+	An `Encoder` is an isolated encode/decode context. Each instance carries
+	its own table of custom per-type encoders, so two encoders configured
+	differently can co-exist without interfering with each other or with the
+	module-level [Bufferize.encode] / [Bufferize.decode] functions.
+
+	Create one with [Bufferize.custom]\:
+
+	```lua
+	local myEncoder = Bufferize.custom()
+	myEncoder:override("Color3", { read = ..., write = ... })
+
+	local b = myEncoder:encode(Color3.new(1, 0, 0))
+	local color = myEncoder:decode(b)
+	```
+
+	A buffer produced by an `Encoder` with overrides can only be decoded by an
+	encoder configured with the same overrides — there is no way to recover the
+	override information from the buffer alone.
+]=]
 local EncoderStatic = {}
+
+--[=[
+	@within Encoder
+	@prop VERSION string
+
+	The semantic version string of the running Bufferize module. Mirrors
+	[Bufferize.VERSION].
+]=]
 EncoderStatic.VERSION = tostring(WALLY_SEMVER.ver)
 
 local EncoderClass = {}
@@ -189,6 +219,14 @@ export type Encoder = typeof(setmetatable(
 	EncoderClass
 ))
 
+--[=[
+	@within Encoder
+	@function new
+	@return Encoder
+
+	Creates a new encoder with no overrides registered. Prefer calling this via
+	[Bufferize.custom] for clarity at the call site.
+]=]
 function EncoderStatic.new()
 	local self = setmetatable({}, EncoderClass) :: Encoder
 
@@ -197,6 +235,15 @@ function EncoderStatic.new()
 	return self
 end
 
+--[=[
+	@within Encoder
+	@function readVersion
+	@param b buffer -- A buffer previously produced by an encoder's `encode` method.
+	@return string? -- The semantic version string written into the header, or `nil` if it could not be parsed.
+
+	Reads the Bufferize version stored in the buffer's header without decoding
+	the body. See [Bufferize.readVersion].
+]=]
 function EncoderStatic.readVersion(b: buffer)
 	local stream = BufferStream.static(b)
 	local length = stream:readu8()
@@ -205,6 +252,18 @@ function EncoderStatic.readVersion(b: buffer)
 	return if ver then tostring(ver) else nil
 end
 
+--[=[
+	@within Encoder
+	@method override
+	@param typeOf string -- The `typeof` name of the data type to override (e.g. `"CFrame"`, `"Color3"`).
+	@param encoder { read: (buffer) -> T, write: (T) -> buffer } -- A pair of conversion functions between the data type and a `buffer`.
+
+	Registers a custom read/write pair for the given data type on this encoder.
+	The same override must be present on whichever encoder decodes the buffer
+	later — there is no way to recover it from the buffer itself.
+
+	Attempting to override a type that is not overridable raises an error.
+]=]
 function EncoderClass.override<T>(self: Encoder, typeOf: string, encoder: CustomEncoder<T>)
 	local definition = DataTypes.Encoder.definitionsByTypeOf[typeOf]
 	if definition then
@@ -213,6 +272,16 @@ function EncoderClass.override<T>(self: Encoder, typeOf: string, encoder: Custom
 	self.encoders[typeOf] = encoder
 end
 
+--[=[
+	@within Encoder
+	@method encode
+	@param ... Supported -- One or more values of supported data types.
+	@return buffer -- A buffer that round-trips through this encoder's `decode` to the same values.
+
+	Encodes the given values into a buffer, applying any overrides registered
+	via [Encoder:override]. The buffer is prefixed with the running Bufferize
+	version.
+]=]
 function EncoderClass.encode(self: Encoder, ...: Supported)
 	-- we always wrap our inputs in a table b/c it will ensure
 	-- pointers are being used for duplicated tables
@@ -234,6 +303,16 @@ function EncoderClass.encode(self: Encoder, ...: Supported)
 	return encodeInternal(packed, self.encoders)
 end
 
+--[=[
+	@within Encoder
+	@method decode
+	@param b buffer -- A buffer previously produced by this encoder (or one with the same overrides).
+	@return ...Supported -- The original values, in the same order they were passed to `encode`.
+
+	Decodes a buffer produced by `encode`. Raises an error if the buffer was
+	encoded with an incompatible major version, or with a newer version of
+	Bufferize than the one currently loaded.
+]=]
 function EncoderClass.decode(self: Encoder, b: buffer)
 	local packed = decodeInternal(b, self.encoders)
 	local packedN = packed.n or #packed
