@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.7.0">
+<title data-rh="true">Encoder | Bufferize</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://egomoose.github.io/rbx-bufferize/api/Encoder"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Encoder | Bufferize"><meta data-rh="true" name="description" content="An `Encoder` is an isolated encode/decode context. Each instance carries
+its own table of custom per-type encoders, so two encoders configured
+differently can co-exist without interfering with each other or with the
+module-level [Bufferize.encode] / [Bufferize.decode] functions.
+
+Create one with [Bufferize.custom]\:
+
+```lua
+local myEncoder = Bufferize.custom()
+myEncoder:override(&quot;Color3&quot;, { read = ..., write = ... })
+
+local b = myEncoder:encode(Color3.new(1, 0, 0))
+local color = myEncoder:decode(b)
+```
+
+A buffer produced by an `Encoder` with overrides can only be decoded by an
+encoder configured with the same overrides — there is no way to recover the
+override information from the buffer alone."><meta data-rh="true" property="og:description" content="An `Encoder` is an isolated encode/decode context. Each instance carries
+its own table of custom per-type encoders, so two encoders configured
+differently can co-exist without interfering with each other or with the
+module-level [Bufferize.encode] / [Bufferize.decode] functions.
+
+Create one with [Bufferize.custom]\:
+
+```lua
+local myEncoder = Bufferize.custom()
+myEncoder:override(&quot;Color3&quot;, { read = ..., write = ... })
+
+local b = myEncoder:encode(Color3.new(1, 0, 0))
+local color = myEncoder:decode(b)
+```
+
+A buffer produced by an `Encoder` with overrides can only be decoded by an
+encoder configured with the same overrides — there is no way to recover the
+override information from the buffer alone."><link data-rh="true" rel="icon" href="/rbx-bufferize/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://egomoose.github.io/rbx-bufferize/api/Encoder"><link data-rh="true" rel="alternate" href="https://egomoose.github.io/rbx-bufferize/api/Encoder" hreflang="en"><link data-rh="true" rel="alternate" href="https://egomoose.github.io/rbx-bufferize/api/Encoder" hreflang="x-default"><link rel="stylesheet" href="/rbx-bufferize/assets/css/styles.7a4bdbad.css">
+<script src="/rbx-bufferize/assets/js/runtime~main.d9cb6cff.js" defer="defer"></script>
+<script src="/rbx-bufferize/assets/js/main.901bdf9e.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();null!==e?t(e):window.matchMedia("(prefers-color-scheme: dark)").matches?t("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,t("light"))}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/rbx-bufferize/"><b class="navbar__title text--truncate">Bufferize</b></a><a class="navbar__item navbar__link" href="/rbx-bufferize/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/rbx-bufferize/api/">API</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/EgoMoose/rbx-bufferize" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><a href="https://github.com/EgoMoose/rbx-bufferize" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite" aria-pressed="false"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/rbx-bufferize/api/Bufferize">​Bufferize</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/rbx-bufferize/api/Encoder">​Encoder</a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Encoder</span></h1><div class="luaClassTags_EipM"></div><div>
+<p>
+  An <code>Encoder</code> is an isolated encode/decode context. Each instance carries
+  its own table of custom per-type encoders, so two encoders configured
+  differently can co-exist without interfering with each other or with the
+  module-level <a href="/rbx-bufferize/api/Bufferize#encode">Bufferize.encode</a> / <a href="/rbx-bufferize/api/Bufferize#decode">Bufferize.decode</a> functions.
+</p>
+<p>Create one with <a href="/rbx-bufferize/api/Bufferize#custom">Bufferize.custom</a>:</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> myEncoder <span class="token operator">=</span> Bufferize<span class="token punctuation">.</span><span class="token function">custom</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+myEncoder<span class="token punctuation">:</span><span class="token function">override</span><span class="token punctuation">(</span><span class="token string">"Color3"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> read <span class="token operator">=</span> <span class="token punctuation">...</span><span class="token punctuation">,</span> write <span class="token operator">=</span> <span class="token punctuation">...</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">local</span> b <span class="token operator">=</span> myEncoder<span class="token punctuation">:</span><span class="token function">encode</span><span class="token punctuation">(</span>Color3<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">local</span> color <span class="token operator">=</span> myEncoder<span class="token punctuation">:</span><span class="token function">decode</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+</code></pre>
+<p>
+  A buffer produced by an <code>Encoder</code> with overrides can only be decoded by an
+  encoder configured with the same overrides — there is no way to recover the
+  override information from the buffer alone.
+</p>
+</div></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="VERSION"><code style="text-decoration:none">VERSION</code><a href="#VERSION" class="hash-link" aria-label="Direct link to VERSION" title="Direct link to VERSION">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/Encoder.luau#L209"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Encoder<!-- -->.<!-- -->VERSION<!-- -->:<!-- --> </code> <code class="blue_P4bS">string</code></div><div>
+<p>
+  The semantic version string of the running Bufferize module. Mirrors
+  <a href="/rbx-bufferize/api/Bufferize#VERSION">Bufferize.VERSION</a>.
+</p>
+</div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/Encoder.luau#L230"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Encoder<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/rbx-bufferize/api/Encoder">Encoder</a></code></div><div>
+<p>
+  Creates a new encoder with no overrides registered. Prefer calling this via
+  <a href="/rbx-bufferize/api/Bufferize#custom">Bufferize.custom</a> for clarity at the call site.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="readVersion"><code style="text-decoration:none">readVersion</code><a href="#readVersion" class="hash-link" aria-label="Direct link to readVersion" title="Direct link to readVersion">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/Encoder.luau#L247"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Encoder<!-- -->.</code><code class="green_DgR4">readVersion</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
+<p>A buffer previously produced by an encoder's <code>encode</code> method.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">string?</code><span class="inlineDescription_G7Er">-- <span>
+<p>The semantic version string written into the header, or <code>nil</code> if it could not be parsed.</p>
+</span></span></div><div>
+<p>
+  Reads the Bufferize version stored in the buffer's header without decoding
+  the body. See <a href="/rbx-bufferize/api/Bufferize#readVersion">Bufferize.readVersion</a>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="override"><code style="text-decoration:none">override</code><a href="#override" class="hash-link" aria-label="Direct link to override" title="Direct link to override">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/Encoder.luau#L267"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Encoder<!-- -->:</code><code class="green_DgR4">override</code><code>(</code><div class="inset_uKQm"><div><code>typeOf<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>The <code>typeof</code> name of the data type to override (e.g. <code>"CFrame"</code>, <code>"Color3"</code>).</p>
+</span></span></div><div><code>encoder<!-- -->: </code><code class="purple_ieR2">{</code><div class="inset_uKQm"><code>read<!-- -->: </code><code class="green_DgR4">(</code><code class="blue_P4bS">buffer</code><code class="green_DgR4">)</code><code class="green_DgR4"> → </code><code class="blue_P4bS">T</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>write<!-- -->: </code><code class="green_DgR4">(</code><code class="blue_P4bS">T</code><code class="green_DgR4">)</code><code class="green_DgR4"> → </code><code class="blue_P4bS">buffer</code></div><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
+<p>A pair of conversion functions between the data type and a <code>buffer</code>.</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Registers a custom read/write pair for the given data type on this encoder.
+  The same override must be present on whichever encoder decodes the buffer
+  later — there is no way to recover it from the buffer itself.
+</p>
+<p>Attempting to override a type that is not overridable raises an error.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="encode"><code style="text-decoration:none">encode</code><a href="#encode" class="hash-link" aria-label="Direct link to encode" title="Direct link to encode">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/Encoder.luau#L285"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Encoder<!-- -->:</code><code class="green_DgR4">encode</code><code>(</code><div class="inset_uKQm"><div><code>...<!-- -->: </code><code class="blue_P4bS">Supported</code><span class="inlineDescription_G7Er">-- <span>
+<p>One or more values of supported data types.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
+<p>A buffer that round-trips through this encoder's <code>decode</code> to the same values.</p>
+</span></span></div><div>
+<p>
+  Encodes the given values into a buffer, applying any overrides registered
+  via <a href="/rbx-bufferize/api/Encoder#override">Encoder:override</a>. The buffer is prefixed with the running Bufferize
+  version.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="decode"><code style="text-decoration:none">decode</code><a href="#decode" class="hash-link" aria-label="Direct link to decode" title="Direct link to decode">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/Encoder.luau#L316"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Encoder<!-- -->:</code><code class="green_DgR4">decode</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
+<p>A buffer previously produced by this encoder (or one with the same overrides).</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">...Supported</code><span class="inlineDescription_G7Er">-- <span>
+<p>The original values, in the same order they were passed to <code>encode</code>.</p>
+</span></span></div><div>
+<p>
+  Decodes a buffer produced by <code>encode</code>. Raises an error if the buffer was
+  encoded with an incompatible major version, or with a newer version of
+  Bufferize than the one currently loaded.
+</p>
+</div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;new&quot;,
+            &quot;desc&quot;: &quot;Creates a new encoder with no overrides registered. Prefer calling this via\n[Bufferize.custom] for clarity at the call site.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Encoder&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 230,
+                &quot;path&quot;: &quot;src/Encoder.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;readVersion&quot;,
+            &quot;desc&quot;: &quot;Reads the Bufferize version stored in the buffer&#x27;s header without decoding\nthe body. See [Bufferize.readVersion].&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;b&quot;,
+                    &quot;desc&quot;: &quot;A buffer previously produced by an encoder&#x27;s `encode` method.&quot;,
+                    &quot;lua_type&quot;: &quot;buffer&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The semantic version string written into the header, or `nil` if it could not be parsed.&quot;,
+                    &quot;lua_type&quot;: &quot;string?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 247,
+                &quot;path&quot;: &quot;src/Encoder.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;override&quot;,
+            &quot;desc&quot;: &quot;Registers a custom read/write pair for the given data type on this encoder.\nThe same override must be present on whichever encoder decodes the buffer\nlater — there is no way to recover it from the buffer itself.\n\nAttempting to override a type that is not overridable raises an error.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;typeOf&quot;,
+                    &quot;desc&quot;: &quot;The `typeof` name of the data type to override (e.g. `\&quot;CFrame\&quot;`, `\&quot;Color3\&quot;`).&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;encoder&quot;,
+                    &quot;desc&quot;: &quot;A pair of conversion functions between the data type and a `buffer`.&quot;,
+                    &quot;lua_type&quot;: &quot;{ read: (buffer) -&gt; T, write: (T) -&gt; buffer }&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 267,
+                &quot;path&quot;: &quot;src/Encoder.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;encode&quot;,
+            &quot;desc&quot;: &quot;Encodes the given values into a buffer, applying any overrides registered\nvia [Encoder:override]. The buffer is prefixed with the running Bufferize\nversion.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;...&quot;,
+                    &quot;desc&quot;: &quot;One or more values of supported data types.&quot;,
+                    &quot;lua_type&quot;: &quot;Supported&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;A buffer that round-trips through this encoder&#x27;s `decode` to the same values.&quot;,
+                    &quot;lua_type&quot;: &quot;buffer&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 285,
+                &quot;path&quot;: &quot;src/Encoder.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;decode&quot;,
+            &quot;desc&quot;: &quot;Decodes a buffer produced by `encode`. Raises an error if the buffer was\nencoded with an incompatible major version, or with a newer version of\nBufferize than the one currently loaded.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;b&quot;,
+                    &quot;desc&quot;: &quot;A buffer previously produced by this encoder (or one with the same overrides).&quot;,
+                    &quot;lua_type&quot;: &quot;buffer&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The original values, in the same order they were passed to `encode`.&quot;,
+                    &quot;lua_type&quot;: &quot;...Supported&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 316,
+                &quot;path&quot;: &quot;src/Encoder.luau&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [
+        {
+            &quot;name&quot;: &quot;VERSION&quot;,
+            &quot;desc&quot;: &quot;The semantic version string of the running Bufferize module. Mirrors\n[Bufferize.VERSION].&quot;,
+            &quot;lua_type&quot;: &quot;string&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 209,
+                &quot;path&quot;: &quot;src/Encoder.luau&quot;
+            }
+        }
+    ],
+    &quot;types&quot;: [],
+    &quot;name&quot;: &quot;Encoder&quot;,
+    &quot;desc&quot;: &quot;An `Encoder` is an isolated encode/decode context. Each instance carries\nits own table of custom per-type encoders, so two encoders configured\ndifferently can co-exist without interfering with each other or with the\nmodule-level [Bufferize.encode] / [Bufferize.decode] functions.\n\nCreate one with [Bufferize.custom]\\:\n\n```lua\nlocal myEncoder = Bufferize.custom()\nmyEncoder:override(\&quot;Color3\&quot;, { read = ..., write = ... })\n\nlocal b = myEncoder:encode(Color3.new(1, 0, 0))\nlocal color = myEncoder:decode(b)\n```\n\nA buffer produced by an `Encoder` with overrides can only be decoded by an\nencoder configured with the same overrides — there is no way to recover the\noverride information from the buffer alone.&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 200,
+        &quot;path&quot;: &quot;src/Encoder.luau&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#VERSION" class="table-of-contents__link toc-highlight">VERSION</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#decode" class="table-of-contents__link toc-highlight">:decode</a></li><li><a href="#encode" class="table-of-contents__link toc-highlight">:encode</a></li><li><a href="#override" class="table-of-contents__link toc-highlight">:override</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li><li><a href="#readVersion" class="table-of-contents__link toc-highlight">.readVersion</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 EgoMoose. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
