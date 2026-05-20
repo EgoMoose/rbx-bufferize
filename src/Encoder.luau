@@ -183,7 +183,7 @@ end
 	differently can co-exist without interfering with each other or with the
 	module-level [Bufferize.encode] / [Bufferize.decode] functions.
 
-	Create one with [Bufferize.custom]:
+	Create one with [Bufferize.custom]\:
 
 	```lua
 	local myEncoder = Bufferize.custom()
@@ -262,8 +262,7 @@ end
 	The same override must be present on whichever encoder decodes the buffer
 	later — there is no way to recover it from the buffer itself.
 
-	Attempting to override a type that is not overridable (see the
-	[supported data types](/docs/supported-data-types) table) raises an error.
+	Attempting to override a type that is not overridable raises an error.
 ]=]
 function EncoderClass.override<T>(self: Encoder, typeOf: string, encoder: CustomEncoder<T>)
 	local definition = DataTypes.Encoder.definitionsByTypeOf[typeOf]

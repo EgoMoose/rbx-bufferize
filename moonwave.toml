@@ -5,24 +5,8 @@ changelog = true
 autoSectionPath = "src"
 
 [home]
-enabled = true
-includeReadMe = false
-
-[[home.features]]
-title = "Lossless by default"
-description = "Encode and decode the full range of supported Roblox data types into compact buffers without losing precision."
-
-[[home.features]]
-title = "Custom encoders"
-description = "Override the encoding of any supported data type to trade precision for a smaller buffer size."
-
-[[home.features]]
-title = "Instance serialization"
-description = "Serialize whole instance trees — including properties, attributes, tags, and internal references — into buffers."
-
-[[home.features]]
-title = "Versioned buffers"
-description = "Every buffer carries the Bufferize version that wrote it, so decoding across incompatible versions fails fast instead of corrupting data."
+enabled = false
+includeReadme = true
 
 [docusaurus]
 projectName = "rbx-bufferize"
@@ -36,7 +20,7 @@ organizationName = "EgoMoose"
 
 [footer]
 style = "dark"
-copyright = "Copyright © 2024 EgoMoose. Built with Moonwave and Docusaurus."
+copyright = "Copyright © 2026 EgoMoose. Built with Moonwave and Docusaurus."
 
 [[navbar.items]]
 href = "https://github.com/EgoMoose/rbx-bufferize"

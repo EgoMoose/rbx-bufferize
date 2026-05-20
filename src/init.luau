@@ -35,7 +35,7 @@ local defaultEncoder = Encoder.new()
 
 	The semantic version string of the running Bufferize module. This is the
 	same value that gets written into the header of every buffer produced by
-	`encode`. See the [versioning guide](/docs/versioning) for compatibility
+	`encode`. See the versioning guide in the readme for compatibility
 	rules.
 ]=]
 Bufferize.VERSION = Encoder.VERSION
@@ -63,7 +63,7 @@ Bufferize.readVersion = Encoder.readVersion
 	encoder is independent of the module-level `encode` / `decode` functions —
 	you must use the same encoder for both halves of a round-trip.
 
-	See the [custom encoding guide](/docs/custom-encoding) for examples.
+	See custom encoding in the readme for examples.
 ]=]
 Bufferize.custom = Encoder.new
 
