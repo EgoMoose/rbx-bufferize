@@ -27,6 +27,19 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 	assignPointer(rootInstance)
 	for _, descendant in rootInstance:GetDescendants() do
 		assignPointer(descendant)
+
+		for _, attributeValue in descendant:GetAttributes() do
+			if typeof(attributeValue) == "InstanceHandle" then
+				local attributeInstance = attributeValue:Get() :: Instance?
+				if
+					attributeInstance
+					and not pointerByInstance[attributeInstance]
+					and (attributeInstance:IsDescendantOf(rootInstance) or attributeInstance == rootInstance)
+				then
+					assignPointer(attributeInstance)
+				end
+			end
+		end
 	end
 
 	for instance, pointer in pointerByInstance do
@@ -72,7 +85,11 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 
 		for attributeName, attributeValue in instance:GetAttributes() do
 			serialized[j + 1] = "$" .. attributeName -- use dollar sign to identify attribute keys
-			serialized[j + 2] = attributeValue
+			if typeof(attributeValue) == "InstanceHandle" then
+				serialized[j + 2] = pointerByInstance[attributeValue:Get()] or nilPointer
+			else
+				serialized[j + 2] = attributeValue
+			end
 			j = j + 2
 		end
 
