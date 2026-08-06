@@ -109,6 +109,18 @@ For example, say you used bufferize v1.0.0 to store data in a datastore and then
 
 This means in practice that when a major version of bufferize releases old data will not be compatible. When the minor or patch version changes you can decode your old data with the new version of bufferize, but you can't decode your new data with the old version.
 
+If you'd rather branch on compatibility than handle an error you can check a buffer before decoding it. `Bufferize.isCompatible` runs the same version check that `decode` does, so a `false` result means `decode` would throw.
+
+```luau
+if Bufferize.isCompatible(b) then
+	local value = Bufferize.decode(b)
+else
+	print(`cannot decode a buffer from version {Bufferize.readVersion(b)} with version {Bufferize.VERSION}`)
+end
+```
+
+Only the header is read, so a `true` result doesn't promise the rest of the buffer is well-formed. Buffers that weren't produced by `encode` at all return `false`.
+
 ## Supported DataTypes
 
 | **DataType**                | **Supported** | **Overridable** |

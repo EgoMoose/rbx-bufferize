@@ -55,6 +55,31 @@ Bufferize.readVersion = Encoder.readVersion
 
 --[=[
 	@within Bufferize
+	@function isCompatible
+	@tag Versioning
+	@param b buffer -- A buffer previously produced by `Bufferize.encode`.
+	@return boolean -- `true` if the buffer's header version can be decoded by the running version of Bufferize.
+
+	Checks whether the running version of Bufferize is able to decode the given
+	buffer. This is the same version check `decode` performs, so a `false` result
+	means `decode` would raise an error rather than return a value.
+
+	```lua
+	if Bufferize.isCompatible(b) then
+		local value = Bufferize.decode(b)
+	else
+		-- migrate the data with an older version, or discard it
+	end
+	```
+
+	Only the version header is inspected — the body is not decoded, so a `true`
+	result does not guarantee the rest of the buffer is well-formed. Buffers that
+	were not produced by `encode` at all return `false`.
+]=]
+Bufferize.isCompatible = Encoder.isCompatible
+
+--[=[
+	@within Bufferize
 	@function custom
 	@return Encoder -- A new encoder with no overrides registered.
 
