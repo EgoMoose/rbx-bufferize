@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[676],{4410:e=>{e.exports=JSON.parse('{"sourceUrl":"https://github.com/EgoMoose/rbx-bufferize/blob/main","baseUrl":"/rbx-bufferize/","classOrder":[],"apiCategories":[]}')}}]);
