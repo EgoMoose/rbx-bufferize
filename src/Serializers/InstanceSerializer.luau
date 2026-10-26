@@ -39,6 +39,7 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 		-- technically not a true array b/c mismatched types, but this will encode more efficiently
 		local serialized: { any } = { className }
 		local properties = ReflectionService:GetPropertiesOfClass(className, {
+			-- selene: allow(undefined_variable)
 			Security = SecurityCapabilities.fromCurrent(),
 			ExcludeInherited = false,
 			ExcludeDisplay = false,
@@ -72,7 +73,12 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 
 		for attributeName, attributeValue in instance:GetAttributes() do
 			serialized[j + 1] = "$" .. attributeName -- use dollar sign to identify attribute keys
-			serialized[j + 2] = attributeValue
+			if typeof(attributeValue) == "InstanceHandle" then
+				local attributeInstance = attributeValue:Get()
+				serialized[j + 2] = attributeInstance and pointerByInstance[attributeInstance] or nilPointer
+			else
+				serialized[j + 2] = attributeValue
+			end
 			j = j + 2
 		end
 
@@ -95,12 +101,16 @@ end
 function InstanceSerializer.deserialize(serializedArr: { any })
 	local instances = {}
 
+	-- create every instance up front so pointers can reference instances later in the array
 	for i, serialized in serializedArr do
-		local className = serialized[1]
+		instances[i] = Instance.new(serialized[1])
+	end
+
+	for i, serialized in serializedArr do
 		local keyValueCount = serialized[2] * 2
 		local tagCount = serialized[3 + keyValueCount] or 0
 
-		local instance = Instance.new(className)
+		local instance = instances[i]
 		local instanceAny = instance :: any
 
 		local isAttribute = false
@@ -125,8 +135,6 @@ function InstanceSerializer.deserialize(serializedArr: { any })
 			local tagName = serialized[3 + keyValueCount + j]
 			instance:AddTag(tagName)
 		end
-
-		instances[i] = instance
 	end
 
 	return instances[1]
