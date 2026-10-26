@@ -27,19 +27,6 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 	assignPointer(rootInstance)
 	for _, descendant in rootInstance:GetDescendants() do
 		assignPointer(descendant)
-
-		for _, attributeValue in descendant:GetAttributes() do
-			if typeof(attributeValue) == "InstanceHandle" then
-				local attributeInstance = attributeValue:Get() :: Instance?
-				if
-					attributeInstance
-					and not pointerByInstance[attributeInstance]
-					and (attributeInstance:IsDescendantOf(rootInstance) or attributeInstance == rootInstance)
-				then
-					assignPointer(attributeInstance)
-				end
-			end
-		end
 	end
 
 	for instance, pointer in pointerByInstance do
@@ -87,8 +74,8 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 		for attributeName, attributeValue in instance:GetAttributes() do
 			serialized[j + 1] = "$" .. attributeName -- use dollar sign to identify attribute keys
 			if typeof(attributeValue) == "InstanceHandle" then
-				local attributeInstance = attributeValue:Get() :: Instance -- it's actually Instance?, but the typechecker will yell
-				serialized[j + 2] = pointerByInstance[attributeInstance] or nilPointer
+				local attributeInstance = attributeValue:Get()
+				serialized[j + 2] = attributeInstance and pointerByInstance[attributeInstance] or nilPointer
 			else
 				serialized[j + 2] = attributeValue
 			end
@@ -114,12 +101,16 @@ end
 function InstanceSerializer.deserialize(serializedArr: { any })
 	local instances = {}
 
+	-- create every instance up front so pointers can reference instances later in the array
 	for i, serialized in serializedArr do
-		local className = serialized[1]
+		instances[i] = Instance.new(serialized[1])
+	end
+
+	for i, serialized in serializedArr do
 		local keyValueCount = serialized[2] * 2
 		local tagCount = serialized[3 + keyValueCount] or 0
 
-		local instance = Instance.new(className)
+		local instance = instances[i]
 		local instanceAny = instance :: any
 
 		local isAttribute = false
@@ -144,8 +135,6 @@ function InstanceSerializer.deserialize(serializedArr: { any })
 			local tagName = serialized[3 + keyValueCount + j]
 			instance:AddTag(tagName)
 		end
-
-		instances[i] = instance
 	end
 
 	return instances[1]
