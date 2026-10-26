@@ -7,11 +7,18 @@ registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 license = "MIT"
 exclude = ["**"]
-include = ["src", "src/**", "wally.toml", "wally.lock", "default.project.json", "LICENSE"]
+include = [
+	"src",
+	"src/**",
+	"wally.toml",
+	"wally.lock",
+	"default.project.json",
+	"LICENSE",
+]
 
 [dependencies]
 CargoSemver = "tim7775/cargo-semver@1.0.20"
-BufferStream = "egomoose/buffer-stream@1.0.0"
+BufferStream = "egomoose/buffer-stream@1.1.0"
 
 [dev-dependencies]
 Jest = "jsdotlua/jest@3.10.0"
