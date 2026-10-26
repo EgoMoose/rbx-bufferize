@@ -56,6 +56,26 @@ end
 
 local WALLY_SEMVER = getWallySemVer()
 
+local function readHeaderVersion(stream: BufferStream.BufferStream)
+	local length = stream:readu8()
+	local wallyVersion = stream:readString(length)
+	return CargoSemver.Version.parse(wallyVersion)
+end
+
+local function assertCompatibleHeader(stream: BufferStream.BufferStream)
+	local headerVer = assert(readHeaderVersion(stream), "Failed to read header version.")
+
+	assert(
+		headerVer >= WALLY_SEMVER.majorVer and headerVer < WALLY_SEMVER.nextMajorVer,
+		`Attempted to decode a buffer encoded with a different major version '{headerVer}'.`
+	)
+
+	assert(
+		headerVer <= WALLY_SEMVER.ver,
+		`Attempted to decode a buffer encoded with a newer version of Bufferize '{headerVer}'.`
+	)
+end
+
 local function encodeInternal(rootTbl: { [any]: any }, encoders: { [string]: CustomEncoder<any> })
 	if next(encoders) then
 		local stack = {} :: { CopyStackEntry<any> }
@@ -119,21 +139,7 @@ end
 
 local function decodeInternal(b: buffer, encoders: { [string]: CustomEncoder<any> })
 	local stream = BufferStream.static(b)
-	local length = stream:readu8()
-	local wallyVersion = stream:readString(length)
-
-	local headerVer = assert(CargoSemver.Version.parse(wallyVersion), "Failed to read header version.")
-	assert(
-		headerVer >= WALLY_SEMVER.majorVer and headerVer < WALLY_SEMVER.nextMajorVer,
-		`Attempted to decode a buffer encoded with a different major version '{headerVer}'.`
-	)
-
-	assert(
-		headerVer <= WALLY_SEMVER.ver,
-		`Attempted to decode a buffer encoded with a newer version of Bufferize '{headerVer}'.`
-	)
-
-	-- also don't want the version to be greater than WALLY_SEMVER.ver
+	assertCompatibleHeader(stream)
 
 	local rootTbl = DataTypes.Encoder:readStream(stream)
 
@@ -245,11 +251,23 @@ end
 	the body. See [Bufferize.readVersion].
 ]=]
 function EncoderStatic.readVersion(b: buffer)
-	local stream = BufferStream.static(b)
-	local length = stream:readu8()
-	local wallyVersion = stream:readString(length)
-	local ver = CargoSemver.Version.parse(wallyVersion)
-	return if ver then tostring(ver) else nil
+	local success, ver = pcall(readHeaderVersion, BufferStream.static(b))
+	return if success and ver then tostring(ver) else nil
+end
+
+--[=[
+	@within Encoder
+	@function isCompatible
+	@param b buffer -- A buffer previously produced by an encoder's `encode` method.
+	@return boolean -- Whether the running version of Bufferize is able to decode the buffer.
+
+	Checks whether the version written into the buffer's header is compatible
+	with the running version of Bufferize, i.e. whether `decode` will accept it
+	rather than raising a version error. See [Bufferize.isCompatible].
+]=]
+function EncoderStatic.isCompatible(b: buffer)
+	local success = pcall(assertCompatibleHeader, BufferStream.static(b))
+	return success
 end
 
 --[=[
