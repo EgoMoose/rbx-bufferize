@@ -52,6 +52,7 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 		-- technically not a true array b/c mismatched types, but this will encode more efficiently
 		local serialized: { any } = { className }
 		local properties = ReflectionService:GetPropertiesOfClass(className, {
+			-- selene: allow(undefined_variable)
 			Security = SecurityCapabilities.fromCurrent(),
 			ExcludeInherited = false,
 			ExcludeDisplay = false,
@@ -86,7 +87,8 @@ function InstanceSerializer.serialize(rootInstance: Instance)
 		for attributeName, attributeValue in instance:GetAttributes() do
 			serialized[j + 1] = "$" .. attributeName -- use dollar sign to identify attribute keys
 			if typeof(attributeValue) == "InstanceHandle" then
-				serialized[j + 2] = pointerByInstance[attributeValue:Get()] or nilPointer
+				local attributeInstance = attributeValue:Get() :: Instance -- it's actually Instance?, but the typechecker will yell
+				serialized[j + 2] = pointerByInstance[attributeInstance] or nilPointer
 			else
 				serialized[j + 2] = attributeValue
 			end
