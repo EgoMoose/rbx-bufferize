@@ -6,6 +6,47 @@ local dataTypesRoot = script:FindFirstAncestor("DataTypes")
 local BufferStream = require(dataTypesRoot.Parent.BufferStream)
 
 local F32_EPSILON = math.pow(2, -23)
+local AXES = { Vector3.xAxis, Vector3.yAxis, Vector3.zAxis }
+
+local function findAxis(x: number, y: number, z: number)
+	local axis = math.abs(y) * 1 + math.abs(z) * 2
+	return axis, math.max(0, -(x + y + z))
+end
+
+local function rotationToIndex(sanitizedCF: CFrame)
+	local _, _, _, m11, m12, m13, m21, m22, m23, m31, m32, m33 = sanitizedCF:GetComponents()
+
+	local v1 = Vector3.new(m11, m12, m13)
+	local v2 = Vector3.new(m21, m22, m23)
+	local v3 = Vector3.new(m31, m32, m33)
+	if v1:Cross(v2) ~= v3 then
+		return nil :: number?
+	end
+
+	local c1, n1 = findAxis(m11, m12, m13)
+	local c2, n2 = findAxis(m21, m22, m23)
+	local c2Reduced = if c2 < c1 then c2 else c2 - 1
+	return c1 * 8 + c2Reduced * 4 + n1 * 2 + n2 + 1
+end
+
+local function indexToRotation(index: number)
+	local i = index - 1
+	local c1 = i // 8
+	local c2Reduced = (i // 4) % 2
+	local c2 = if c2Reduced < c1 then c2Reduced else c2Reduced + 1
+
+	local r1 = AXES[c1 + 1] * (1 - ((i // 2) % 2) * 2)
+	local r2 = AXES[c2 + 1] * (1 - (i % 2) * 2)
+	local r3 = r1:Cross(r2)
+
+	-- stylua: ignore
+	return CFrame.new(
+		0, 0, 0,
+		r1.X, r1.Y, r1.Z,
+		r2.X, r2.Y, r2.Z,
+		r3.X, r3.Y, r3.Z
+	)
+end
 
 local function sanitizeCF(cframe: CFrame)
 	local matrix = { select(4, cframe:GetComponents()) }
@@ -31,72 +72,10 @@ local function sanitizeCF(cframe: CFrame)
 	return true, CFrame.new(cframe.X, cframe.Y, cframe.Z, table.unpack(matrix, 1, 9))
 end
 
-local function u32Rotation(sanitizedCF: CFrame)
-	local m11, m12, m13, m21, m22, m23, m31, m32, m33 = select(4, sanitizedCF:GetComponents())
-	local r1 = math.max(m11 + m12 + m13, 0)
-	local r2 = math.max(m21 + m22 + m23, 0)
-	local r3 = math.max(m31 + m32 + m33, 0)
-	-- stylua: ignore
-	return tonumber(table.concat({
-		r1, math.abs(m11), math.abs(m12), math.abs(m13),
-		r2, math.abs(m21), math.abs(m22), math.abs(m23),
-		r3, math.abs(m31), math.abs(m32), math.abs(m33),
-	}, ""), 2) :: number
-end
-
-local function generateRotationLookups(rotations: { CFrame })
-	local byIndex = {}
-	local byU32 = {}
-	for i, rotation in rotations do
-		local success, sanitizedCF = sanitizeCF(rotation.Rotation)
-		assert(success, "Tried to sanitize the rotation matrix of a complex CFrame.")
-		local rotation32 = u32Rotation(sanitizedCF)
-		byIndex[i] = sanitizedCF
-		byU32[rotation32] = i
-	end
-
-	return {
-		byIndex = byIndex,
-		byU32 = byU32,
-	}
-end
-
-local function rotationYXZ(degX: number, degY: number, degZ: number)
-	return CFrame.fromEulerAngles(math.rad(degX), math.rad(degY), math.rad(degZ), Enum.RotationOrder.YXZ)
-end
-
-local ROTATION_LOOKUP = generateRotationLookups({
-	rotationYXZ(0, 0, 0),
-	rotationYXZ(90, 0, 0),
-	rotationYXZ(0, 180, 180),
-	rotationYXZ(-90, 0, 0),
-	rotationYXZ(0, 180, 90),
-	rotationYXZ(0, 90, 90),
-	rotationYXZ(0, 0, 90),
-	rotationYXZ(0, -90, 90),
-	rotationYXZ(-90, -90, 0),
-	rotationYXZ(0, -90, 0),
-	rotationYXZ(90, -90, 0),
-	rotationYXZ(0, 90, 180),
-	rotationYXZ(0, 180, 0),
-	rotationYXZ(-90, -180, 0),
-	rotationYXZ(0, 0, 180),
-	rotationYXZ(90, 180, 0),
-	rotationYXZ(0, 0, -90),
-	rotationYXZ(0, -90, -90),
-	rotationYXZ(0, -180, -90),
-	rotationYXZ(0, 90, -90),
-	rotationYXZ(90, 90, 0),
-	rotationYXZ(0, 90, 0),
-	rotationYXZ(-90, 90, 0),
-	rotationYXZ(0, -90, 180),
-})
-
 local function read(stream: BufferStream.BufferStream)
 	local index = stream:readu8()
 	if index > 0 then
-		local rotation = ROTATION_LOOKUP.byIndex[index]
-		return CFrame.new(stream:readf32(), stream:readf32(), stream:readf32()) * rotation
+		return CFrame.new(stream:readf32(), stream:readf32(), stream:readf32()) * indexToRotation(index)
 	else
 		local components = {}
 		for i = 1, 12 do
@@ -108,11 +87,9 @@ end
 
 local function write(stream: BufferStream.BufferStream, cframe: CFrame)
 	local success, sanitizedCF = sanitizeCF(cframe)
+	local rotationIndex = if success then rotationToIndex(sanitizedCF) else nil
 
-	if success then
-		local rotation32 = u32Rotation(sanitizedCF)
-		local rotationIndex = ROTATION_LOOKUP.byU32[rotation32]
-
+	if rotationIndex then
 		stream:writeu8(rotationIndex)
 		stream:writef32(cframe.X)
 		stream:writef32(cframe.Y)
