@@ -17,33 +17,52 @@ local VALUES = {
 	CFrame.new(1, 2, 3, 1, 0, 0, 0, 1, 0, 0, 0, -1),
 }
 
--- every axis aligned rotation
-local ALIGNED = {}
-for _, rx in { 0, 90, 180, 270 } do
-	for _, ry in { 0, 90, 180, 270 } do
-		for _, rz in { 0, 90, 180, 270 } do
-			table.insert(ALIGNED, CFrame.new(1, 2, 3) * CFrame.Angles(math.rad(rx), math.rad(ry), math.rad(rz)))
-		end
-	end
-end
-
 local function writtenLength(cframe: CFrame)
 	local stream = BufferStream.dynamic(buffer.create(0))
 	CFrameDefinition:writeStream(stream, cframe)
 	return stream:getCursor()
 end
 
-it("should write axis aligned rotations as an index", function()
-	local indices = {}
-	for _, cframe in ALIGNED do
+-- https://dom.rojo.space/binary.html#cframe
+-- euler angles in degrees, applied in YXZ order
+local BINARY_FORMAT_IDS = {
+	[0x02] = { 0, 0, 0 },
+	[0x03] = { 90, 0, 0 },
+	[0x05] = { 0, 180, 180 },
+	[0x06] = { -90, 0, 0 },
+	[0x07] = { 0, 180, 90 },
+	[0x09] = { 0, 90, 90 },
+	[0x0a] = { 0, 0, 90 },
+	[0x0c] = { 0, -90, 90 },
+	[0x0d] = { -90, -90, 0 },
+	[0x0e] = { 0, -90, 0 },
+	[0x10] = { 90, -90, 0 },
+	[0x11] = { 0, 90, 180 },
+	[0x14] = { 0, 180, 0 },
+	[0x15] = { -90, -180, 0 },
+	[0x17] = { 0, 0, 180 },
+	[0x18] = { 90, 180, 0 },
+	[0x19] = { 0, 0, -90 },
+	[0x1b] = { 0, -90, -90 },
+	[0x1c] = { 0, -180, -90 },
+	[0x1e] = { 0, 90, -90 },
+	[0x1f] = { 90, 90, 0 },
+	[0x20] = { 0, 90, 0 },
+	[0x22] = { -90, 90, 0 },
+	[0x23] = { 0, -90, 180 },
+}
+
+it("should write axis aligned rotations with the binary format ids", function()
+	for id, degrees in BINARY_FORMAT_IDS do
+		local rx, ry, rz = math.rad(degrees[1]), math.rad(degrees[2]), math.rad(degrees[3])
+		local cframe = CFrame.new(1, 2, 3) * CFrame.fromEulerAngles(rx, ry, rz, Enum.RotationOrder.YXZ)
+
 		local stream = BufferStream.dynamic(buffer.create(0))
 		CFrameStream.write(stream, cframe)
 		expect(stream:getCursor()).toBe(1 + 12)
 
 		stream:setCursor(0)
-		local index = stream:readu8()
-		expect(index >= 1 and index <= 24).toBe(true)
-		indices[index] = true
+		expect(stream:readu8()).toBe(id)
 
 		-- the euler angles leave float noise in the input, the decoded rotation should be exact
 		-- compared with == rather than toEqual since signed zeros are expected
@@ -54,10 +73,6 @@ it("should write axis aligned rotations as an index", function()
 			local component = if i <= 3 then expected[i] else math.round(expected[i])
 			expect(decoded[i] == component).toBe(true)
 		end
-	end
-
-	for i = 1, 24 do
-		expect(indices[i]).toBe(true)
 	end
 end)
 

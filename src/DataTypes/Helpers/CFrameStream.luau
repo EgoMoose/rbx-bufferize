@@ -6,45 +6,46 @@ local dataTypesRoot = script:FindFirstAncestor("DataTypes")
 local BufferStream = require(dataTypesRoot.Parent.BufferStream)
 
 local F32_EPSILON = math.pow(2, -23)
-local AXES = { Vector3.xAxis, Vector3.yAxis, Vector3.zAxis }
 
-local function findAxis(x: number, y: number, z: number)
+local NORMALS = {
+	Vector3.xAxis,
+	Vector3.yAxis,
+	Vector3.zAxis,
+	-Vector3.xAxis,
+	-Vector3.yAxis,
+	-Vector3.zAxis,
+}
+
+local function toNormalId(x: number, y: number, z: number)
 	local axis = math.abs(y) * 1 + math.abs(z) * 2
-	return axis, math.max(0, -(x + y + z))
+	return if x + y + z < 0 then axis + 3 else axis
 end
 
+-- matches the rotation ids used by the roblox binary format: https://dom.rojo.space/binary.html#cframe
 local function rotationToIndex(sanitizedCF: CFrame)
 	local _, _, _, m11, m12, m13, m21, m22, m23, m31, m32, m33 = sanitizedCF:GetComponents()
 
-	local v1 = Vector3.new(m11, m12, m13)
-	local v2 = Vector3.new(m21, m22, m23)
-	local v3 = Vector3.new(m31, m32, m33)
-	if v1:Cross(v2) ~= v3 then
+	local vx = Vector3.new(m11, m21, m31)
+	local vy = Vector3.new(m12, m22, m32)
+	local vz = Vector3.new(m13, m23, m33)
+	if vx:Cross(vy) ~= vz then
 		return nil :: number?
 	end
 
-	local c1, n1 = findAxis(m11, m12, m13)
-	local c2, n2 = findAxis(m21, m22, m23)
-	local c2Reduced = if c2 < c1 then c2 else c2 - 1
-	return c1 * 8 + c2Reduced * 4 + n1 * 2 + n2 + 1
+	return 6 * toNormalId(m11, m21, m31) + toNormalId(m12, m22, m32) + 1
 end
 
 local function indexToRotation(index: number)
-	local i = index - 1
-	local c1 = i // 8
-	local c2Reduced = (i // 4) % 2
-	local c2 = if c2Reduced < c1 then c2Reduced else c2Reduced + 1
-
-	local r1 = AXES[c1 + 1] * (1 - ((i // 2) % 2) * 2)
-	local r2 = AXES[c2 + 1] * (1 - (i % 2) * 2)
-	local r3 = r1:Cross(r2)
+	local right = NORMALS[(index - 1) // 6 + 1]
+	local up = NORMALS[(index - 1) % 6 + 1]
+	local back = right:Cross(up)
 
 	-- stylua: ignore
 	return CFrame.new(
 		0, 0, 0,
-		r1.X, r1.Y, r1.Z,
-		r2.X, r2.Y, r2.Z,
-		r3.X, r3.Y, r3.Z
+		right.X, up.X, back.X,
+		right.Y, up.Y, back.Y,
+		right.Z, up.Z, back.Z
 	)
 end
 
