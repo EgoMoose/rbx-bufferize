@@ -74,3 +74,83 @@ describe("readVersion", function()
 		expect(Bufferize.readVersion(headerOnly("not.a.version"))).toEqual(nil)
 	end)
 end)
+
+describe("read / write", function()
+	it("should round trip multiple values packed into one buffer.", function()
+		local cf = CFrame.new(1, 2, 3) * CFrame.Angles(0.1, 0.2, 0.3)
+		local v = Vector3.new(4, 5, 6)
+
+		local b, offset = Bufferize.write.CFrame(buffer.create(0), 0, cf)
+		b, offset = Bufferize.write.Vector3(b, offset, v)
+		b, offset = Bufferize.write.string(b, offset, "Hello world!")
+		expect(buffer.len(b)).toEqual(offset)
+
+		local readCF, readOffset = Bufferize.read.CFrame(b, 0)
+		local readV, readStr
+		readV, readOffset = Bufferize.read.Vector3(b, readOffset)
+		readStr, readOffset = Bufferize.read.string(b, readOffset)
+
+		expect(readCF).toEqual(cf)
+		expect(readV).toEqual(v)
+		expect(readStr).toEqual("Hello world!")
+		expect(readOffset).toEqual(offset)
+	end)
+
+	it("should write in place when the buffer is large enough.", function()
+		local b = buffer.create(64)
+		local written, offset = Bufferize.write.Vector3(b, 8, Vector3.new(1, 2, 3))
+		expect(written).toBe(b)
+		expect((Bufferize.read.Vector3(b, 8))).toEqual(Vector3.new(1, 2, 3))
+		expect(offset > 8).toEqual(true)
+	end)
+
+	it("should not include a type id.", function()
+		local b = Bufferize.write.Vector3(buffer.create(0), 0, Vector3.new(1, 2, 3))
+		local encoded = Bufferize.encode(Vector3.new(1, 2, 3))
+		expect(buffer.len(b) < buffer.len(encoded)).toEqual(true)
+	end)
+
+	it("should not expose unsupported types.", function()
+		local readers = Bufferize.read :: any
+		local writers = Bufferize.write :: any
+		expect(readers.Instance).toBeNil()
+		expect(writers.Instance).toBeNil()
+		expect(readers["userdata:Userdefined"]).toBeNil()
+	end)
+end)
+
+describe("encodeHeaderless / decodeHeaderless", function()
+	it("should round trip values.", function()
+		local shared = { 1, 2, 3 }
+		local a, b, c, d = Bufferize.decodeHeaderless(Bufferize.encodeHeaderless("Hello world!", nil, shared, shared))
+		expect(a).toEqual("Hello world!")
+		expect(b).toBeNil()
+		expect(c).toEqual({ 1, 2, 3 })
+		expect(c).toBe(d)
+	end)
+
+	it("should be smaller than encode by exactly the header.", function()
+		local withHeader = Bufferize.encode(Vector3.new(1, 2, 3))
+		local withoutHeader = Bufferize.encodeHeaderless(Vector3.new(1, 2, 3))
+		expect(buffer.len(withHeader) - buffer.len(withoutHeader)).toEqual(1 + #Bufferize.VERSION)
+	end)
+
+	it("should not be decodable with the header version check.", function()
+		expect(Bufferize.isCompatible(Bufferize.encodeHeaderless("Hello world!"))).toEqual(false)
+	end)
+
+	it("should apply encoder overrides.", function()
+		local encoder = Bufferize.custom()
+		encoder:override("string", {
+			read = function(b: buffer)
+				return buffer.tostring(b):upper()
+			end,
+			write = function(str: string)
+				return buffer.fromstring(str)
+			end,
+		})
+
+		local decoded = encoder:decodeHeaderless(encoder:encodeHeaderless({ "hello" }))
+		expect(decoded).toEqual({ "HELLO" })
+	end)
+end)

@@ -85,4 +85,26 @@ function DataTypeDefinitionClass.writeStream<T>(self: DataTypeDefinition<T>, str
 	self.definition.write(stream, value)
 end
 
+-- raw reads / writes skip the typeId and operate directly on a buffer at an offset
+
+function DataTypeDefinitionClass.readRaw<T>(self: DataTypeDefinition<T>, b: buffer, offset: number): (T, number)
+	local stream = BufferStream.static(b)
+	assert(offset >= 0 and offset <= stream:getLength(), `Offset '{offset}' is out of bounds.`)
+	stream:setCursor(offset)
+	local value = self.definition.read(stream)
+	return value, stream:getCursor()
+end
+
+function DataTypeDefinitionClass.writeRaw<T>(self: DataTypeDefinition<T>, b: buffer, offset: number, value: T)
+	assert(offset >= 0, `Offset '{offset}' is out of bounds.`)
+	local stream = BufferStream.dynamic(b)
+	local length = stream:getLength()
+	if offset > length then
+		stream:expand(offset - length)
+	end
+	stream:setCursor(offset)
+	self.definition.write(stream, value)
+	return stream.buffer, stream:getCursor()
+end
+
 return DataTypeDefinitionStatic

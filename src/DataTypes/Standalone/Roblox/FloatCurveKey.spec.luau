@@ -18,3 +18,13 @@ TestHelper.dataType(require(script.Parent.FloatCurveKey), {
 		return a == b
 	end,
 })
+
+local JestGlobals = require(game.ReplicatedStorage.DevPackages.JestGlobals)
+local Bufferize = require(game.ReplicatedStorage.Packages.Bufferize)
+
+JestGlobals.it("should not corrupt values encoded after a key without tangents.", function()
+	local ck = FloatCurveKey.new(0.3, math.pi, Enum.KeyInterpolationMode.Cubic)
+	local decodedCK, decodedStr = Bufferize.decode(Bufferize.encode(ck, "after"))
+	JestGlobals.expect(decodedCK == ck).toEqual(true)
+	JestGlobals.expect(decodedStr).toEqual("after")
+end)

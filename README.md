@@ -99,6 +99,22 @@ local lengthB = buffer.len(inHouseEncoder:encode(complexRotation))
 print(lengthA > lengthB) -- true
 ```
 
+## Raw Read / Write
+
+The encoding for each data type is also exposed directly via `Bufferize.read` and `Bufferize.write`. These skip the version header and type ids, so they're useful when you already know the layout of your data and want to pack values as tightly as possible.
+
+Readers take a buffer and offset and return the value along with the offset immediately after it. Writers take a buffer, offset, and value and return the buffer along with the offset immediately after the written value. If the value doesn't fit, a larger copy of the buffer is returned, so always use the returned buffer for subsequent writes.
+
+```luau
+local b, offset = Bufferize.write.CFrame(buffer.create(0), 0, CFrame.new(1, 2, 3))
+b, offset = Bufferize.write.Vector3(b, offset, Vector3.new(4, 5, 6))
+
+local cf, nextOffset = Bufferize.read.CFrame(b, 0)
+local v3 = Bufferize.read.Vector3(b, nextOffset)
+```
+
+Raw readers and writers always use the default encoding and ignore any overrides registered on a custom encoder. Since no version header is written, buffers produced this way are not protected by the versioning checks described below.
+
 ## Versioning
 
 Bufferize strictly adheres to [semantic versioning](https://semver.org/).
@@ -106,6 +122,8 @@ Bufferize strictly adheres to [semantic versioning](https://semver.org/).
 When a buffer is encoded the current version of bufferize is included. That way when a buffer is decoded it's possible to ensure we're not attempting to decode with an incompatible version of bufferize.
 
 For example, say you used bufferize v1.0.0 to store data in a datastore and then v2.0.0 is released. If you tried to read the v1.0.0 data with v2.0.0 bufferize then you'd get an error.
+
+If you don't need these guarantees (e.g. for short-lived data sent over the network where both ends are always running the same version) you can use `Bufferize.encodeHeaderless` and `Bufferize.decodeHeaderless` to skip writing the version header and save a few bytes. No version checks are performed when decoding these buffers. Custom encoders have the matching `encoder:encodeHeaderless` and `encoder:decodeHeaderless` methods.
 
 This means in practice that when a major version of bufferize releases old data will not be compatible. When the minor or patch version changes you can decode your old data with the new version of bufferize, but you can't decode your new data with the old version.
 

@@ -17,6 +17,7 @@
 ]=]
 
 local Encoder = require(script.Encoder)
+local DataTypes = require(script.DataTypes)
 
 local Deduplicator = require(script.Serializers.Deduplicator)
 local InstanceSerializer = require(script.Serializers.InstanceSerializer)
@@ -24,6 +25,8 @@ local InstanceSerializer = require(script.Serializers.InstanceSerializer)
 export type Encoder = Encoder.Encoder
 export type Supported = Encoder.Supported
 export type Overridable = Encoder.Overridable
+export type Readers = DataTypes.Readers
+export type Writers = DataTypes.Writers
 
 local Bufferize = {}
 local defaultEncoder = Encoder.new()
@@ -77,6 +80,51 @@ Bufferize.readVersion = Encoder.readVersion
 	were not produced by `encode` at all return `false`.
 ]=]
 Bufferize.isCompatible = Encoder.isCompatible
+
+--[=[
+	@within Bufferize
+	@prop read Readers
+	@tag Raw
+
+	A table of raw reader functions keyed by data type name (e.g.
+	`Bufferize.read.CFrame`). Each reader has the signature
+	`(b: buffer, offset: number) -> (value, nextOffset)` and reads a single
+	value written by the matching [Bufferize.write] function.
+
+	Unlike `decode`, raw readers do not expect a version header or a type id —
+	the caller is responsible for knowing which type is stored at each offset.
+
+	```lua
+	local b, offset = Bufferize.write.CFrame(buffer.create(0), 0, cf)
+	b, offset = Bufferize.write.Vector3(b, offset, v)
+
+	local cf2, nextOffset = Bufferize.read.CFrame(b, 0)
+	local v2 = Bufferize.read.Vector3(b, nextOffset)
+	```
+
+	Raw readers always use the default encoding and ignore any overrides
+	registered on an [Encoder].
+]=]
+Bufferize.read = DataTypes.Readers
+
+--[=[
+	@within Bufferize
+	@prop write Writers
+	@tag Raw
+
+	A table of raw writer functions keyed by data type name (e.g.
+	`Bufferize.write.CFrame`). Each writer has the signature
+	`(b: buffer, offset: number, value) -> (buffer, nextOffset)` and writes a
+	single value without a version header or type id.
+
+	If the value fits inside `b` it is written in place and `b` is returned.
+	Otherwise a larger copy of `b` is created and returned instead, so always
+	use the returned buffer for subsequent writes.
+
+	Raw writers always use the default encoding and ignore any overrides
+	registered on an [Encoder].
+]=]
+Bufferize.write = DataTypes.Writers
 
 --[=[
 	@within Bufferize
@@ -201,6 +249,35 @@ end
 ]=]
 function Bufferize.decode(b: buffer)
 	return defaultEncoder:decode(b)
+end
+
+--[=[
+	@within Bufferize
+	@tag Versioning
+	@param ... Supported -- One or more values of supported data types.
+	@return buffer -- A buffer that round-trips through `Bufferize.decodeHeaderless` to the same values.
+
+	Same as [Bufferize.encode], but the version header is omitted. This saves a
+	few bytes per buffer at the cost of the version compatibility checks, so
+	it's best suited to short-lived data (e.g. networking) where both ends are
+	guaranteed to be running the same version of Bufferize.
+]=]
+function Bufferize.encodeHeaderless(...: Supported)
+	return defaultEncoder:encodeHeaderless(...)
+end
+
+--[=[
+	@within Bufferize
+	@tag Versioning
+	@param b buffer -- A buffer previously produced by `Bufferize.encodeHeaderless`.
+	@return ...Supported -- The original values, in the same order they were passed to `encodeHeaderless`.
+
+	Decodes a buffer produced by [Bufferize.encodeHeaderless]. No version
+	checks are performed, so decoding a buffer produced by an incompatible
+	version of Bufferize may error or return incorrect values.
+]=]
+function Bufferize.decodeHeaderless(b: buffer)
+	return defaultEncoder:decodeHeaderless(b)
 end
 
 return Bufferize
