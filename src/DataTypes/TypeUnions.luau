@@ -1,4 +1,5 @@
-export type Supported = nil
+export type Supported =
+	nil
 	| boolean
 	| number
 	| string
@@ -36,8 +37,10 @@ export type Supported = nil
 	| Vector2int16
 	| Vector3
 	| Vector3int16
+	| DateTime
 
-export type Overridable = nil
+export type Overridable =
+	nil
 	| boolean
 	| number
 	| string
@@ -73,5 +76,6 @@ export type Overridable = nil
 	| Vector2int16
 	| Vector3
 	| Vector3int16
+	| DateTime
 
 return {}

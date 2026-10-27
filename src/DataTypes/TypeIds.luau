@@ -71,6 +71,8 @@ local REGISTERED_BY_TYPEOF: { [string]: typeof(increment("")) } = {
 	["Vector2int16"] = increment("2.0.0"),
 	["Vector3"] = increment("2.0.0"),
 	["Vector3int16"] = increment("2.0.0"),
+
+	["DateTime"] = increment("4.0.0"),
 }
 
 table.sort(registeredArr, function(a, b)

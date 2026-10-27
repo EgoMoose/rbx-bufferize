@@ -177,6 +177,7 @@ Only the header is read, so a `true` result doesn't promise the rest of the buff
 | **Vector2int16**            | ✔             | ✔               |
 | **Vector3**                 | ✔             | ✔               |
 | **Vector3int16**            | ✔             | ✔               |
+| **DateTime**                | ✔             | ✔               |
 
 
 ✔ Implemented  | ❌ Unimplemented | ⛔ Never
