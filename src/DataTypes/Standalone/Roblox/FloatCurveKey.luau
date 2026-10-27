@@ -2,11 +2,9 @@ local dataTypesRoot = script:FindFirstAncestor("DataTypes")
 local DataTypeDefinition = require(dataTypesRoot.DataTypeDefinition)
 
 local function readTangent(stream: DataTypeDefinition.BufferStream, tangentId: number): number?
-	local prevCursor = stream.cursor
 	if stream:readu8() == tangentId then
 		return stream:readf32()
 	end
-	stream.cursor = prevCursor
 	return nil
 end
 

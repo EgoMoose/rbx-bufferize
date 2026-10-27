@@ -61,6 +61,21 @@ function TestHelper.dataType<T>(definition: DataTypeDefinition.DataTypeDefinitio
 				local decodedValue = definition:readStream(stream)
 				expect(test.compare(decodedValue, value)).toEqual(true)
 			end)
+
+			it("should raw encode / decode losslessly at an offset.", function()
+				local b, offset = definition:writeRaw(buffer.create(0), 3, value)
+				local after
+				b, after = definition:writeRaw(b, offset, value)
+				expect(buffer.len(b)).toEqual(after)
+
+				local decodedValue, nextOffset = definition:readRaw(b, 3)
+				expect(test.compare(decodedValue, value)).toEqual(true)
+				expect(nextOffset).toEqual(offset)
+
+				local decodedValue2, nextOffset2 = definition:readRaw(b, nextOffset)
+				expect(test.compare(decodedValue2, value)).toEqual(true)
+				expect(nextOffset2).toEqual(after)
+			end)
 		end
 	end)
 end
