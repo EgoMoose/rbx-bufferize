@@ -76,7 +76,7 @@ local function assertCompatibleHeader(stream: BufferStream.BufferStream)
 	)
 end
 
-local function encodeInternal(rootTbl: { [any]: any }, encoders: { [string]: CustomEncoder<any> })
+local function encodeInternal(rootTbl: { [any]: any }, encoders: { [string]: CustomEncoder<any> }, header: boolean)
 	if next(encoders) then
 		local stack = {} :: { CopyStackEntry<any> }
 
@@ -132,14 +132,18 @@ local function encodeInternal(rootTbl: { [any]: any }, encoders: { [string]: Cus
 	end
 
 	local stream = BufferStream.dynamic(buffer.create(0))
-	stream:writeBuffer(WALLY_SEMVER.header)
+	if header then
+		stream:writeBuffer(WALLY_SEMVER.header)
+	end
 	DataTypes.Encoder:writeStream(stream, rootTbl)
 	return stream.buffer
 end
 
-local function decodeInternal(b: buffer, encoders: { [string]: CustomEncoder<any> })
+local function decodeInternal(b: buffer, encoders: { [string]: CustomEncoder<any> }, header: boolean)
 	local stream = BufferStream.static(b)
-	assertCompatibleHeader(stream)
+	if header then
+		assertCompatibleHeader(stream)
+	end
 
 	local rootTbl = DataTypes.Encoder:readStream(stream)
 
@@ -177,6 +181,32 @@ local function decodeInternal(b: buffer, encoders: { [string]: CustomEncoder<any
 	end
 
 	return rootTbl
+end
+
+local function packValues(...: Supported)
+	-- we always wrap our inputs in a table b/c it will ensure
+	-- pointers are being used for duplicated tables
+	local packed = table.pack(...)
+
+	local hasGap = false
+	for i = 1, packed.n do
+		if packed[i] == nil then
+			hasGap = true
+			break
+		end
+	end
+
+	if not hasGap then
+		local packedAny = packed :: any
+		packedAny.n = nil
+	end
+
+	return packed
+end
+
+local function unpackValues(packed: { [any]: any })
+	local packedN = packed.n or #packed
+	return table.unpack(packed, 1, packedN)
 end
 
 -- Class
@@ -301,24 +331,7 @@ end
 	version.
 ]=]
 function EncoderClass.encode(self: Encoder, ...: Supported)
-	-- we always wrap our inputs in a table b/c it will ensure
-	-- pointers are being used for duplicated tables
-	local packed = table.pack(...)
-
-	local hasGap = false
-	for i = 1, packed.n do
-		if packed[i] == nil then
-			hasGap = true
-			break
-		end
-	end
-
-	if not hasGap then
-		local packedAny = packed :: any
-		packedAny.n = nil
-	end
-
-	return encodeInternal(packed, self.encoders)
+	return encodeInternal(packValues(...), self.encoders, true)
 end
 
 --[=[
@@ -332,9 +345,36 @@ end
 	Bufferize than the one currently loaded.
 ]=]
 function EncoderClass.decode(self: Encoder, b: buffer)
-	local packed = decodeInternal(b, self.encoders)
-	local packedN = packed.n or #packed
-	return table.unpack(packed, 1, packedN)
+	return unpackValues(decodeInternal(b, self.encoders, true))
+end
+
+--[=[
+	@within Encoder
+	@method encodeHeaderless
+	@param ... Supported -- One or more values of supported data types.
+	@return buffer -- A buffer that round-trips through this encoder's `decodeHeaderless` to the same values.
+
+	Same as [Encoder:encode], but the version header is omitted. This saves a
+	few bytes per buffer at the cost of the version compatibility checks, so
+	it's best suited to short-lived data (e.g. networking) where both ends are
+	guaranteed to be running the same version of Bufferize.
+]=]
+function EncoderClass.encodeHeaderless(self: Encoder, ...: Supported)
+	return encodeInternal(packValues(...), self.encoders, false)
+end
+
+--[=[
+	@within Encoder
+	@method decodeHeaderless
+	@param b buffer -- A buffer previously produced by this encoder's `encodeHeaderless` (or one with the same overrides).
+	@return ...Supported -- The original values, in the same order they were passed to `encodeHeaderless`.
+
+	Decodes a buffer produced by [Encoder:encodeHeaderless]. No version checks
+	are performed, so decoding a buffer produced by an incompatible version of
+	Bufferize may error or return incorrect values.
+]=]
+function EncoderClass.decodeHeaderless(self: Encoder, b: buffer)
+	return unpackValues(decodeInternal(b, self.encoders, false))
 end
 
 --

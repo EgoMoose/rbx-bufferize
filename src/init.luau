@@ -251,4 +251,33 @@ function Bufferize.decode(b: buffer)
 	return defaultEncoder:decode(b)
 end
 
+--[=[
+	@within Bufferize
+	@tag Versioning
+	@param ... Supported -- One or more values of supported data types.
+	@return buffer -- A buffer that round-trips through `Bufferize.decodeHeaderless` to the same values.
+
+	Same as [Bufferize.encode], but the version header is omitted. This saves a
+	few bytes per buffer at the cost of the version compatibility checks, so
+	it's best suited to short-lived data (e.g. networking) where both ends are
+	guaranteed to be running the same version of Bufferize.
+]=]
+function Bufferize.encodeHeaderless(...: Supported)
+	return defaultEncoder:encodeHeaderless(...)
+end
+
+--[=[
+	@within Bufferize
+	@tag Versioning
+	@param b buffer -- A buffer previously produced by `Bufferize.encodeHeaderless`.
+	@return ...Supported -- The original values, in the same order they were passed to `encodeHeaderless`.
+
+	Decodes a buffer produced by [Bufferize.encodeHeaderless]. No version
+	checks are performed, so decoding a buffer produced by an incompatible
+	version of Bufferize may error or return incorrect values.
+]=]
+function Bufferize.decodeHeaderless(b: buffer)
+	return defaultEncoder:decodeHeaderless(b)
+end
+
 return Bufferize

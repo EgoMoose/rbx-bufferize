@@ -118,3 +118,39 @@ describe("read / write", function()
 		expect(readers["userdata:Userdefined"]).toBeNil()
 	end)
 end)
+
+describe("encodeHeaderless / decodeHeaderless", function()
+	it("should round trip values.", function()
+		local shared = { 1, 2, 3 }
+		local a, b, c, d = Bufferize.decodeHeaderless(Bufferize.encodeHeaderless("Hello world!", nil, shared, shared))
+		expect(a).toEqual("Hello world!")
+		expect(b).toBeNil()
+		expect(c).toEqual({ 1, 2, 3 })
+		expect(c).toBe(d)
+	end)
+
+	it("should be smaller than encode by exactly the header.", function()
+		local withHeader = Bufferize.encode(Vector3.new(1, 2, 3))
+		local withoutHeader = Bufferize.encodeHeaderless(Vector3.new(1, 2, 3))
+		expect(buffer.len(withHeader) - buffer.len(withoutHeader)).toEqual(1 + #Bufferize.VERSION)
+	end)
+
+	it("should not be decodable with the header version check.", function()
+		expect(Bufferize.isCompatible(Bufferize.encodeHeaderless("Hello world!"))).toEqual(false)
+	end)
+
+	it("should apply encoder overrides.", function()
+		local encoder = Bufferize.custom()
+		encoder:override("string", {
+			read = function(b: buffer)
+				return buffer.tostring(b):upper()
+			end,
+			write = function(str: string)
+				return buffer.fromstring(str)
+			end,
+		})
+
+		local decoded = encoder:decodeHeaderless(encoder:encodeHeaderless({ "hello" }))
+		expect(decoded).toEqual({ "HELLO" })
+	end)
+end)

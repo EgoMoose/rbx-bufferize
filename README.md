@@ -123,6 +123,8 @@ When a buffer is encoded the current version of bufferize is included. That way 
 
 For example, say you used bufferize v1.0.0 to store data in a datastore and then v2.0.0 is released. If you tried to read the v1.0.0 data with v2.0.0 bufferize then you'd get an error.
 
+If you don't need these guarantees (e.g. for short-lived data sent over the network where both ends are always running the same version) you can use `Bufferize.encodeHeaderless` and `Bufferize.decodeHeaderless` to skip writing the version header and save a few bytes. No version checks are performed when decoding these buffers. Custom encoders have the matching `encoder:encodeHeaderless` and `encoder:decodeHeaderless` methods.
+
 This means in practice that when a major version of bufferize releases old data will not be compatible. When the minor or patch version changes you can decode your old data with the new version of bufferize, but you can't decode your new data with the old version.
 
 If you'd rather branch on compatibility than handle an error you can check a buffer before decoding it. `Bufferize.isCompatible` runs the same version check that `decode` does, so a `false` result means `decode` would throw.
