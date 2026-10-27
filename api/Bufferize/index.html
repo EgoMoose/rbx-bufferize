@@ -28,8 +28,8 @@ dedicated [Encoder] with [Bufferize.custom].
 local b = Bufferize.encode(&quot;Hello world!&quot;, 123, true, { foo = &quot;bar&quot; })
 print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot;bar&quot; }
 ```"><link data-rh="true" rel="icon" href="/rbx-bufferize/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://egomoose.github.io/rbx-bufferize/api/Bufferize"><link data-rh="true" rel="alternate" href="https://egomoose.github.io/rbx-bufferize/api/Bufferize" hreflang="en"><link data-rh="true" rel="alternate" href="https://egomoose.github.io/rbx-bufferize/api/Bufferize" hreflang="x-default"><link rel="stylesheet" href="/rbx-bufferize/assets/css/styles.3f63b0bb.css">
-<script src="/rbx-bufferize/assets/js/runtime~main.0dbaa534.js" defer="defer"></script>
-<script src="/rbx-bufferize/assets/js/main.5673878f.js" defer="defer"></script>
+<script src="/rbx-bufferize/assets/js/runtime~main.2527f54c.js" defer="defer"></script>
+<script src="/rbx-bufferize/assets/js/main.dc050375.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -50,14 +50,51 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> b <span class="token operator">=</span> Bufferize<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">"Hello world!"</span><span class="token punctuation">,</span> <span class="token number">123</span><span class="token punctuation">,</span> <span class="token keyword">true</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> foo <span class="token operator">=</span> <span class="token string">"bar"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
 <span class="token function">print</span><span class="token punctuation">(</span>Bufferize<span class="token punctuation">.</span><span class="token function">decode</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- "Hello world!", 123, true, { foo = "bar" }</span>
 </code></pre>
-</div></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="VERSION"><code style="text-decoration:none">VERSION</code><a href="#VERSION" class="hash-link" aria-label="Direct link to VERSION" title="Direct link to VERSION" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#70cc00;color:#70cc00">Versioning</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L41"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.<!-- -->VERSION<!-- -->:<!-- --> </code> <code class="blue_P4bS">string</code></div><div>
+</div></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="VERSION"><code style="text-decoration:none">VERSION</code><a href="#VERSION" class="hash-link" aria-label="Direct link to VERSION" title="Direct link to VERSION" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#70cc00;color:#70cc00">Versioning</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L44"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.<!-- -->VERSION<!-- -->:<!-- --> </code> <code class="blue_P4bS">string</code></div><div>
 <p>
   The semantic version string of the running Bufferize module. This is the
   same value that gets written into the header of every buffer produced by
   <code>encode</code>. See the versioning guide in the readme for compatibility
   rules.
 </p>
-</div><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="readVersion"><code style="text-decoration:none">readVersion</code><a href="#readVersion" class="hash-link" aria-label="Direct link to readVersion" title="Direct link to readVersion" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#70cc00;color:#70cc00">Versioning</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L54"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">readVersion</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="read"><code style="text-decoration:none">read</code><a href="#read" class="hash-link" aria-label="Direct link to read" title="Direct link to read" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#ff5252;color:#ff5252">Raw</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L108"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.<!-- -->read<!-- -->:<!-- --> </code> <code class="blue_P4bS">Readers</code></div><div>
+<p>
+  A table of raw reader functions keyed by data type name (e.g.
+  <code>Bufferize.read.CFrame</code>). Each reader has the signature
+  <code>(b: buffer, offset: number) -> (value, nextOffset)</code> and reads a single
+  value written by the matching <a href="/rbx-bufferize/api/Bufferize#write">Bufferize.write</a> function.
+</p>
+<p>
+  Unlike <code>decode</code>, raw readers do not expect a version header or a type id —
+  the caller is responsible for knowing which type is stored at each offset.
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> b<span class="token punctuation">,</span> offset <span class="token operator">=</span> Bufferize<span class="token punctuation">.</span>write<span class="token punctuation">.</span><span class="token function">CFrame</span><span class="token punctuation">(</span>buffer<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> cf<span class="token punctuation">)</span>
+b<span class="token punctuation">,</span> offset <span class="token operator">=</span> Bufferize<span class="token punctuation">.</span>write<span class="token punctuation">.</span><span class="token function">Vector3</span><span class="token punctuation">(</span>b<span class="token punctuation">,</span> offset<span class="token punctuation">,</span> v<span class="token punctuation">)</span>
+
+<span class="token keyword">local</span> cf2<span class="token punctuation">,</span> nextOffset <span class="token operator">=</span> Bufferize<span class="token punctuation">.</span>read<span class="token punctuation">.</span><span class="token function">CFrame</span><span class="token punctuation">(</span>b<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token keyword">local</span> v2 <span class="token operator">=</span> Bufferize<span class="token punctuation">.</span>read<span class="token punctuation">.</span><span class="token function">Vector3</span><span class="token punctuation">(</span>b<span class="token punctuation">,</span> nextOffset<span class="token punctuation">)</span>
+</code></pre>
+<p>
+  Raw readers always use the default encoding and ignore any overrides
+  registered on an <a href="/rbx-bufferize/api/Encoder">Encoder</a>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="write"><code style="text-decoration:none">write</code><a href="#write" class="hash-link" aria-label="Direct link to write" title="Direct link to write" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#ff5252;color:#ff5252">Raw</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L127"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.<!-- -->write<!-- -->:<!-- --> </code> <code class="blue_P4bS">Writers</code></div><div>
+<p>
+  A table of raw writer functions keyed by data type name (e.g.
+  <code>Bufferize.write.CFrame</code>). Each writer has the signature
+  <code>(b: buffer, offset: number, value) -> (buffer, nextOffset)</code> and writes a
+  single value without a version header or type id.
+</p>
+<p>
+  If the value fits inside <code>b</code> it is written in place and <code>b</code> is returned.
+  Otherwise a larger copy of <code>b</code> is created and returned instead, so always
+  use the returned buffer for subsequent writes.
+</p>
+<p>
+  Raw writers always use the default encoding and ignore any overrides
+  registered on an <a href="/rbx-bufferize/api/Encoder">Encoder</a>.
+</p>
+</div><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="readVersion"><code style="text-decoration:none">readVersion</code><a href="#readVersion" class="hash-link" aria-label="Direct link to readVersion" title="Direct link to readVersion" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#70cc00;color:#70cc00">Versioning</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L57"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">readVersion</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
 <p>A buffer previously produced by <code>Bufferize.encode</code>.</p>
 </span></span></div></div><code>) → </code><code class="blue_P4bS">string?</code><span class="inlineDescription_G7Er">-- <span>
 <p>The semantic version string written into the header, or <code>nil</code> if it could not be parsed.</p>
@@ -67,7 +104,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   attempting to decode the body. Useful for migration code that needs to
   branch on the producing version before decoding.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="isCompatible"><code style="text-decoration:none">isCompatible</code><a href="#isCompatible" class="hash-link" aria-label="Direct link to isCompatible" title="Direct link to isCompatible" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#70cc00;color:#70cc00">Versioning</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L79"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">isCompatible</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="isCompatible"><code style="text-decoration:none">isCompatible</code><a href="#isCompatible" class="hash-link" aria-label="Direct link to isCompatible" title="Direct link to isCompatible" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#70cc00;color:#70cc00">Versioning</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L82"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">isCompatible</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
 <p>A buffer previously produced by <code>Bufferize.encode</code>.</p>
 </span></span></div></div><code>) → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
 <p><code>true</code> if the buffer's header version can be decoded by the running version of Bufferize.</p>
@@ -88,7 +125,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   result does not guarantee the rest of the buffer is well-formed. Buffers that
   were not produced by <code>encode</code> at all return <code>false</code>.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="custom"><code style="text-decoration:none">custom</code><a href="#custom" class="hash-link" aria-label="Direct link to custom" title="Direct link to custom" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L93"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">custom</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/rbx-bufferize/api/Encoder">Encoder</a></code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="custom"><code style="text-decoration:none">custom</code><a href="#custom" class="hash-link" aria-label="Direct link to custom" title="Direct link to custom" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L141"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">custom</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/rbx-bufferize/api/Encoder">Encoder</a></code><span class="inlineDescription_G7Er">-- <span>
 <p>A new encoder with no overrides registered.</p>
 </span></span></div><div>
 <p>
@@ -98,7 +135,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   you must use the same encoder for both halves of a round-trip.
 </p>
 <p>See custom encoding in the readme for examples.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="deduplicateTypeof"><code style="text-decoration:none">deduplicateTypeof</code><a href="#deduplicateTypeof" class="hash-link" aria-label="Direct link to deduplicateTypeof" title="Direct link to deduplicateTypeof" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#925FB9;color:#925FB9">Deduplication</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L114"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">deduplicateTypeof</code><code>(</code><div class="inset_uKQm"><div><code>typeOfsSet<!-- -->: </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">string</code><code>]</code></span><code>: </code><code class="blue_P4bS">boolean</code><code class="purple_ieR2">}</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="deduplicateTypeof"><code style="text-decoration:none">deduplicateTypeof</code><a href="#deduplicateTypeof" class="hash-link" aria-label="Direct link to deduplicateTypeof" title="Direct link to deduplicateTypeof" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#925FB9;color:#925FB9">Deduplication</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L162"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">deduplicateTypeof</code><code>(</code><div class="inset_uKQm"><div><code>typeOfsSet<!-- -->: </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">string</code><code>]</code></span><code>: </code><code class="blue_P4bS">boolean</code><code class="purple_ieR2">}</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>Set of type names (e.g. <code>"string"</code>, <code>"CFrame"</code>) to consider for deduplication.</p>
 </span></span></div><div><code>rootTbl<!-- -->: </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">any</code><code>]</code></span><code>: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
 <p>The table to deduplicate.</p>
@@ -117,7 +154,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   original values.
 </p>
 <p>See the <a href="/rbx-bufferize/docs/deduplication">deduplication guide</a> for usage examples.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="deduplicate"><code style="text-decoration:none">deduplicate</code><a href="#deduplicate" class="hash-link" aria-label="Direct link to deduplicate" title="Direct link to deduplicate" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#925FB9;color:#925FB9">Deduplication</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L132"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">deduplicate</code><code>(</code><div class="inset_uKQm"><div><code>supportedSet<!-- -->: </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">any</code><code>]</code></span><code>: </code><code class="blue_P4bS">boolean</code><code class="purple_ieR2">}</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="deduplicate"><code style="text-decoration:none">deduplicate</code><a href="#deduplicate" class="hash-link" aria-label="Direct link to deduplicate" title="Direct link to deduplicate" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#925FB9;color:#925FB9">Deduplication</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L180"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">deduplicate</code><code>(</code><div class="inset_uKQm"><div><code>supportedSet<!-- -->: </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">any</code><code>]</code></span><code>: </code><code class="blue_P4bS">boolean</code><code class="purple_ieR2">}</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
 <p>Set of exact values that should be deduplicated.</p>
 </span></span></div><div><code>rootTbl<!-- -->: </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">any</code><code>]</code></span><code>: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
 <p>The table to deduplicate.</p>
@@ -134,7 +171,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   decoding, use <a href="/rbx-bufferize/api/Bufferize#reduplicate">Bufferize.reduplicate</a> to expand the pointers back into the
   original values.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="reduplicate"><code style="text-decoration:none">reduplicate</code><a href="#reduplicate" class="hash-link" aria-label="Direct link to reduplicate" title="Direct link to reduplicate" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#925FB9;color:#925FB9">Deduplication</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L145"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">reduplicate</code><code>(</code><div class="inset_uKQm"><div><code>compressed<!-- -->: </code><code class="purple_ieR2">{</code><code class="green_DgR4">{</code><span><code>[</code><code class="blue_P4bS">any</code><code>]</code></span><code>: </code><code class="blue_P4bS">any</code><code class="green_DgR4">}</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="reduplicate"><code style="text-decoration:none">reduplicate</code><a href="#reduplicate" class="hash-link" aria-label="Direct link to reduplicate" title="Direct link to reduplicate" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#925FB9;color:#925FB9">Deduplication</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L193"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">reduplicate</code><code>(</code><div class="inset_uKQm"><div><code>compressed<!-- -->: </code><code class="purple_ieR2">{</code><code class="green_DgR4">{</code><span><code>[</code><code class="blue_P4bS">any</code><code>]</code></span><code>: </code><code class="blue_P4bS">any</code><code class="green_DgR4">}</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
 <p>A table previously produced by <code>deduplicate</code> / <code>deduplicateTypeof</code>, after a round-trip through <code>encode</code> / <code>decode</code>.</p>
 </span></span></div></div><code>) → </code><code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">any</code><code>]</code></span><code>: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
 <p>The expanded table with deduplication pointers replaced by their original values.</p>
@@ -144,7 +181,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   a plain table you can use exactly as you would have used the input to the
   deduplication call.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="serializeInstance"><code style="text-decoration:none">serializeInstance</code><a href="#serializeInstance" class="hash-link" aria-label="Direct link to serializeInstance" title="Direct link to serializeInstance" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#dc0073;color:#dc0073">Instances</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L162"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">serializeInstance</code><code>(</code><div class="inset_uKQm"><div><code>rootInstance<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="serializeInstance"><code style="text-decoration:none">serializeInstance</code><a href="#serializeInstance" class="hash-link" aria-label="Direct link to serializeInstance" title="Direct link to serializeInstance" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#dc0073;color:#dc0073">Instances</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L210"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">serializeInstance</code><code>(</code><div class="inset_uKQm"><div><code>rootInstance<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
 <p>The root of the instance tree to serialize.</p>
 </span></span></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
 <p>A plain table representation that can be passed to <code>encode</code>.</p>
@@ -159,7 +196,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   See the <a href="/rbx-bufferize/docs/instances">instances guide</a> for the full set of rules and
   examples.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="deserializeInstance"><code style="text-decoration:none">deserializeInstance</code><a href="#deserializeInstance" class="hash-link" aria-label="Direct link to deserializeInstance" title="Direct link to deserializeInstance" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#dc0073;color:#dc0073">Instances</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L175"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">deserializeInstance</code><code>(</code><div class="inset_uKQm"><div><code>serializedArr<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="deserializeInstance"><code style="text-decoration:none">deserializeInstance</code><a href="#deserializeInstance" class="hash-link" aria-label="Direct link to deserializeInstance" title="Direct link to deserializeInstance" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#dc0073;color:#dc0073">Instances</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L223"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">deserializeInstance</code><code>(</code><div class="inset_uKQm"><div><code>serializedArr<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
 <p>A table previously produced by <code>serializeInstance</code>, after a round-trip through <code>encode</code> / <code>decode</code>.</p>
 </span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
 <p>The reconstructed root instance, with all descendants parented underneath.</p>
@@ -169,7 +206,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   Properties, attributes, tags, and intra-tree references are restored on the
   new instances.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="encode"><code style="text-decoration:none">encode</code><a href="#encode" class="hash-link" aria-label="Direct link to encode" title="Direct link to encode" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L189"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">encode</code><code>(</code><div class="inset_uKQm"><div><code>...<!-- -->: </code><code class="blue_P4bS">Supported</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="encode"><code style="text-decoration:none">encode</code><a href="#encode" class="hash-link" aria-label="Direct link to encode" title="Direct link to encode" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L237"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">encode</code><code>(</code><div class="inset_uKQm"><div><code>...<!-- -->: </code><code class="blue_P4bS">Supported</code><span class="inlineDescription_G7Er">-- <span>
 <p>One or more values of supported data types.</p>
 </span></span></div></div><code>) → </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
 <p>A buffer that round-trips through <code>Bufferize.decode</code> to the same values.</p>
@@ -183,7 +220,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   Tables are walked recursively; shared sub-tables are preserved as shared
   references in the decoded output.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="decode"><code style="text-decoration:none">decode</code><a href="#decode" class="hash-link" aria-label="Direct link to decode" title="Direct link to decode" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L202"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">decode</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="decode"><code style="text-decoration:none">decode</code><a href="#decode" class="hash-link" aria-label="Direct link to decode" title="Direct link to decode" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L250"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">decode</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
 <p>A buffer previously produced by <code>Bufferize.encode</code>.</p>
 </span></span></div></div><code>) → </code><code class="blue_P4bS">...Supported</code><span class="inlineDescription_G7Er">-- <span>
 <p>The original values, in the same order they were passed to <code>encode</code>.</p>
@@ -192,6 +229,27 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
   Decodes a buffer produced by <code>Bufferize.encode</code>. Raises an error if the
   buffer was encoded with an incompatible major version, or with a newer
   version of Bufferize than the one currently loaded.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="encodeHeaderless"><code style="text-decoration:none">encodeHeaderless</code><a href="#encodeHeaderless" class="hash-link" aria-label="Direct link to encodeHeaderless" title="Direct link to encodeHeaderless" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#70cc00;color:#70cc00">Versioning</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L265"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">encodeHeaderless</code><code>(</code><div class="inset_uKQm"><div><code>...<!-- -->: </code><code class="blue_P4bS">Supported</code><span class="inlineDescription_G7Er">-- <span>
+<p>One or more values of supported data types.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
+<p>A buffer that round-trips through <code>Bufferize.decodeHeaderless</code> to the same values.</p>
+</span></span></div><div>
+<p>
+  Same as <a href="/rbx-bufferize/api/Bufferize#encode">Bufferize.encode</a>, but the version header is omitted. This saves a
+  few bytes per buffer at the cost of the version compatibility checks, so
+  it's best suited to short-lived data (e.g. networking) where both ends are
+  guaranteed to be running the same version of Bufferize.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="decodeHeaderless"><code style="text-decoration:none">decodeHeaderless</code><a href="#decodeHeaderless" class="hash-link" aria-label="Direct link to decodeHeaderless" title="Direct link to decodeHeaderless" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#70cc00;color:#70cc00">Versioning</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/EgoMoose/rbx-bufferize/blob/main/src/init.luau#L279"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Bufferize<!-- -->.</code><code class="green_DgR4">decodeHeaderless</code><code>(</code><div class="inset_uKQm"><div><code>b<!-- -->: </code><code class="blue_P4bS">buffer</code><span class="inlineDescription_G7Er">-- <span>
+<p>A buffer previously produced by <code>Bufferize.encodeHeaderless</code>.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">...Supported</code><span class="inlineDescription_G7Er">-- <span>
+<p>The original values, in the same order they were passed to <code>encodeHeaderless</code>.</p>
+</span></span></div><div>
+<p>
+  Decodes a buffer produced by <a href="/rbx-bufferize/api/Bufferize#encodeHeaderless">Bufferize.encodeHeaderless</a>. No version
+  checks are performed, so decoding a buffer produced by an incompatible
+  version of Bufferize may error or return incorrect values.
 </p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
@@ -216,7 +274,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
                 &quot;Versioning&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 54,
+                &quot;line&quot;: 57,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         },
@@ -241,7 +299,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
                 &quot;Versioning&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 79,
+                &quot;line&quot;: 82,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         },
@@ -257,7 +315,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 93,
+                &quot;line&quot;: 141,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         },
@@ -287,7 +345,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
                 &quot;Deduplication&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 114,
+                &quot;line&quot;: 162,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         },
@@ -317,7 +375,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
                 &quot;Deduplication&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 132,
+                &quot;line&quot;: 180,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         },
@@ -342,7 +400,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
                 &quot;Deduplication&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 145,
+                &quot;line&quot;: 193,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         },
@@ -367,7 +425,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
                 &quot;Instances&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 162,
+                &quot;line&quot;: 210,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         },
@@ -392,7 +450,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
                 &quot;Instances&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 175,
+                &quot;line&quot;: 223,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         },
@@ -414,7 +472,7 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 189,
+                &quot;line&quot;: 237,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         },
@@ -436,7 +494,57 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
             ],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 202,
+                &quot;line&quot;: 250,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;encodeHeaderless&quot;,
+            &quot;desc&quot;: &quot;Same as [Bufferize.encode], but the version header is omitted. This saves a\nfew bytes per buffer at the cost of the version compatibility checks, so\nit&#x27;s best suited to short-lived data (e.g. networking) where both ends are\nguaranteed to be running the same version of Bufferize.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;...&quot;,
+                    &quot;desc&quot;: &quot;One or more values of supported data types.&quot;,
+                    &quot;lua_type&quot;: &quot;Supported&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;A buffer that round-trips through `Bufferize.decodeHeaderless` to the same values.&quot;,
+                    &quot;lua_type&quot;: &quot;buffer&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;tags&quot;: [
+                &quot;Versioning&quot;
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 265,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;decodeHeaderless&quot;,
+            &quot;desc&quot;: &quot;Decodes a buffer produced by [Bufferize.encodeHeaderless]. No version\nchecks are performed, so decoding a buffer produced by an incompatible\nversion of Bufferize may error or return incorrect values.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;b&quot;,
+                    &quot;desc&quot;: &quot;A buffer previously produced by `Bufferize.encodeHeaderless`.&quot;,
+                    &quot;lua_type&quot;: &quot;buffer&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The original values, in the same order they were passed to `encodeHeaderless`.&quot;,
+                    &quot;lua_type&quot;: &quot;...Supported&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;tags&quot;: [
+                &quot;Versioning&quot;
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 279,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         }
@@ -450,7 +558,31 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
                 &quot;Versioning&quot;
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 41,
+                &quot;line&quot;: 44,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;read&quot;,
+            &quot;desc&quot;: &quot;A table of raw reader functions keyed by data type name (e.g.\n`Bufferize.read.CFrame`). Each reader has the signature\n`(b: buffer, offset: number) -&gt; (value, nextOffset)` and reads a single\nvalue written by the matching [Bufferize.write] function.\n\nUnlike `decode`, raw readers do not expect a version header or a type id —\nthe caller is responsible for knowing which type is stored at each offset.\n\n```lua\nlocal b, offset = Bufferize.write.CFrame(buffer.create(0), 0, cf)\nb, offset = Bufferize.write.Vector3(b, offset, v)\n\nlocal cf2, nextOffset = Bufferize.read.CFrame(b, 0)\nlocal v2 = Bufferize.read.Vector3(b, nextOffset)\n```\n\nRaw readers always use the default encoding and ignore any overrides\nregistered on an [Encoder].&quot;,
+            &quot;lua_type&quot;: &quot;Readers&quot;,
+            &quot;tags&quot;: [
+                &quot;Raw&quot;
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 108,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;write&quot;,
+            &quot;desc&quot;: &quot;A table of raw writer functions keyed by data type name (e.g.\n`Bufferize.write.CFrame`). Each writer has the signature\n`(b: buffer, offset: number, value) -&gt; (buffer, nextOffset)` and writes a\nsingle value without a version header or type id.\n\nIf the value fits inside `b` it is written in place and `b` is returned.\nOtherwise a larger copy of `b` is created and returned instead, so always\nuse the returned buffer for subsequent writes.\n\nRaw writers always use the default encoding and ignore any overrides\nregistered on an [Encoder].&quot;,
+            &quot;lua_type&quot;: &quot;Writers&quot;,
+            &quot;tags&quot;: [
+                &quot;Raw&quot;
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 127,
                 &quot;path&quot;: &quot;src/init.luau&quot;
             }
         }
@@ -462,6 +594,6 @@ print(Bufferize.decode(b)) -- &quot;Hello world!&quot;, 123, true, { foo = &quot
         &quot;line&quot;: 18,
         &quot;path&quot;: &quot;src/init.luau&quot;
     }
-}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#VERSION" class="table-of-contents__link toc-highlight">VERSION</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#custom" class="table-of-contents__link toc-highlight">.custom</a></li><li><a href="#decode" class="table-of-contents__link toc-highlight">.decode</a></li><li><a href="#deduplicate" class="table-of-contents__link toc-highlight">.deduplicate</a></li><li><a href="#deduplicateTypeof" class="table-of-contents__link toc-highlight">.deduplicateTypeof</a></li><li><a href="#deserializeInstance" class="table-of-contents__link toc-highlight">.deserializeInstance</a></li><li><a href="#encode" class="table-of-contents__link toc-highlight">.encode</a></li><li><a href="#isCompatible" class="table-of-contents__link toc-highlight">.isCompatible</a></li><li><a href="#readVersion" class="table-of-contents__link toc-highlight">.readVersion</a></li><li><a href="#reduplicate" class="table-of-contents__link toc-highlight">.reduplicate</a></li><li><a href="#serializeInstance" class="table-of-contents__link toc-highlight">.serializeInstance</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 EgoMoose. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#read" class="table-of-contents__link toc-highlight">read</a></li><li><a href="#VERSION" class="table-of-contents__link toc-highlight">VERSION</a></li><li><a href="#write" class="table-of-contents__link toc-highlight">write</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#custom" class="table-of-contents__link toc-highlight">.custom</a></li><li><a href="#decode" class="table-of-contents__link toc-highlight">.decode</a></li><li><a href="#decodeHeaderless" class="table-of-contents__link toc-highlight">.decodeHeaderless</a></li><li><a href="#deduplicate" class="table-of-contents__link toc-highlight">.deduplicate</a></li><li><a href="#deduplicateTypeof" class="table-of-contents__link toc-highlight">.deduplicateTypeof</a></li><li><a href="#deserializeInstance" class="table-of-contents__link toc-highlight">.deserializeInstance</a></li><li><a href="#encode" class="table-of-contents__link toc-highlight">.encode</a></li><li><a href="#encodeHeaderless" class="table-of-contents__link toc-highlight">.encodeHeaderless</a></li><li><a href="#isCompatible" class="table-of-contents__link toc-highlight">.isCompatible</a></li><li><a href="#readVersion" class="table-of-contents__link toc-highlight">.readVersion</a></li><li><a href="#reduplicate" class="table-of-contents__link toc-highlight">.reduplicate</a></li><li><a href="#serializeInstance" class="table-of-contents__link toc-highlight">.serializeInstance</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 EgoMoose. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
